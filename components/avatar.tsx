@@ -15,7 +15,7 @@ export default function Avatar() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger asChild className="cursor-pointer">
         <AvatarUI>
           <AvatarImage src="https:github.com/shadcn.png" />
           <AvatarFallback>CN</AvatarFallback>{" "}

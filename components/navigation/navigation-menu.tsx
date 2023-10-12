@@ -1,8 +1,16 @@
 import * as React from "react";
 import Link from "next/link";
+import {MenuIcon} from "lucide-react";
 
 import Avatar from "../avatar";
 import {ModeToggle} from "../mode-toggle";
+import {Button} from "../ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "../ui/dropdown-menu";
 
 import ListLink from "./list-link";
 
@@ -30,8 +38,24 @@ export function NavigationMenu() {
             <h1>WhosIn?</h1>
           </Link>
         </div>
-        <ListLink links={links} />
-        <div className="flex gap-4 items-center">
+        <div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild className="flex lg:hidden">
+              <Button className="outline-none" variant="ghost">
+                <MenuIcon />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              {links.map((link) => (
+                <Link key={link.href} href={link.href}>
+                  <DropdownMenuItem className="cursor-pointer">{link.title}</DropdownMenuItem>
+                </Link>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+        <div className="flex gap-3 items-center">
+          <ListLink links={links} />
           <ModeToggle />
           <Avatar />
         </div>

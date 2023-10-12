@@ -1,8 +1,10 @@
 import * as React from "react";
 import Link from "next/link";
 
-import Avatar from "./avatar";
-import {ModeToggle} from "./mode-toggle";
+import Avatar from "../avatar";
+import {ModeToggle} from "../mode-toggle";
+
+import ListLink from "./list-link";
 
 const links = [
   {
@@ -21,20 +23,14 @@ const links = [
 
 export function NavigationMenu() {
   return (
-    <header>
-      <nav className="flex justify-between w-full items-center py-5 px-10 border-b-2 border-b-slate-400">
+    <header className="mb-10">
+      <nav className="flex justify-between w-full items-center py-5 px-4 md:px-10 border-b-2 border-b-slate-400">
         <div>
           <Link href={"/"}>
             <h1>WhosIn?</h1>
           </Link>
         </div>
-        <ul className="flex gap-8 items-center">
-          {links.map((link) => (
-            <li key={link.href}>
-              <Link href={link.href}>{link.title}</Link>
-            </li>
-          ))}
-        </ul>
+        <ListLink links={links} />
         <div className="flex gap-4 items-center">
           <ModeToggle />
           <Avatar />

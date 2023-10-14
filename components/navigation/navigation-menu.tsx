@@ -1,8 +1,9 @@
+"use client";
 import * as React from "react";
 import Link from "next/link";
 import {MenuIcon} from "lucide-react";
+import {useAuth} from "@clerk/nextjs";
 
-import Avatar from "../avatar";
 import {ModeToggle} from "../mode-toggle";
 import {Button} from "../ui/button";
 import {
@@ -12,6 +13,7 @@ import {
   DropdownMenuItem,
 } from "../ui/dropdown-menu";
 
+import Avatar from "./avatar";
 import ListLink from "./list-link";
 
 const links = [
@@ -30,6 +32,12 @@ const links = [
 ];
 
 export function NavigationMenu() {
+  const {isLoaded, userId} = useAuth();
+
+  if (!isLoaded || !userId) {
+    return null;
+  }
+
   return (
     <header className="mb-10">
       <nav className="flex justify-between w-full items-center py-5 px-4 md:px-10 border-b-2 border-b-slate-400">

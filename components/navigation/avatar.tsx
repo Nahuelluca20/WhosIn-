@@ -26,15 +26,19 @@ export default function Avatar() {
       <DropdownMenuTrigger asChild className="cursor-pointer">
         <AvatarUI>
           <AvatarImage src={user?.imageUrl} />
-          <AvatarFallback>CN</AvatarFallback>{" "}
+          <AvatarFallback>CN</AvatarFallback>
         </AvatarUI>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {theme !== "light" && (
-          <DropdownMenuItem onClick={() => setTheme("light")}>Theme: Light</DropdownMenuItem>
+          <DropdownMenuItem className="flex lg:hidden" onClick={() => setTheme("light")}>
+            Theme: Light
+          </DropdownMenuItem>
         )}
         {theme === "light" && (
-          <DropdownMenuItem onClick={() => setTheme("dark")}>Theme: Dark</DropdownMenuItem>
+          <DropdownMenuItem className="flex lg:hidden" onClick={() => setTheme("dark")}>
+            Theme: Dark
+          </DropdownMenuItem>
         )}
         <DropdownMenuItem>
           <SignOutButton />

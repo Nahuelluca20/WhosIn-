@@ -10,6 +10,8 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
 } from "../ui/dropdown-menu";
 
 export default function Avatar() {
@@ -29,7 +31,18 @@ export default function Avatar() {
           <AvatarFallback>CN</AvatarFallback>
         </AvatarUI>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent forceMount align="end" className="w-56">
+        <DropdownMenuLabel className="font-normal">
+          <div className="flex flex-col space-y-1">
+            <p className="text-sm font-medium leading-none">
+              {user.username ?? user.firstName ?? ""}
+            </p>
+            <p className="text-xs leading-none text-muted-foreground">
+              {user.emailAddresses[0].emailAddress ?? ""}
+            </p>
+          </div>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator className="border" />
         {theme !== "light" && (
           <DropdownMenuItem className="flex lg:hidden" onClick={() => setTheme("light")}>
             Theme: Light

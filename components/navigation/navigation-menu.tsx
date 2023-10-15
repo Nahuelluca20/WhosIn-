@@ -27,10 +27,6 @@ const links = [
     href: "/whos-in",
   },
   {
-    title: "Profile",
-    href: "/user-profile",
-  },
-  {
     title: "Help",
     href: "/help",
   },

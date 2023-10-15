@@ -18,7 +18,7 @@ export default function Avatar() {
   const {setTheme, theme} = useTheme();
 
   if (!isLoaded || !isSignedIn) {
-    return null;
+    return <div className="w-[40px] h-[40px] rounded-full bg-gray-200 animate-pulse" />;
   }
 
   return (

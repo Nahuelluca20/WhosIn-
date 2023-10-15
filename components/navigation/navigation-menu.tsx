@@ -18,12 +18,16 @@ import ListLink from "./list-link";
 
 const links = [
   {
-    title: "Home",
+    title: "Overview",
     href: "/",
   },
   {
     title: "My whosin",
     href: "/whos-in",
+  },
+  {
+    title: "Profile",
+    href: "/user-profile",
   },
   {
     title: "Help",
@@ -40,12 +44,16 @@ export function NavigationMenu() {
 
   return (
     <header className="mb-10">
-      <nav className="flex justify-between w-full items-center py-5 px-4 md:px-10 border-b-2 border-b-slate-400">
-        <div>
+      <nav className="flex justify-between w-full items-center py-2 px-4 md:px-10 border-b border-b-slate-400">
+        <div className="flex items-center gap-3">
           <Link href={"/"}>
             <h1>WhosIn?</h1>
           </Link>
+          {/* <div className="flex gap-3 items-center"> */}
+          <ListLink links={links} />
+          {/* </div> */}
         </div>
+
         <div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild className="flex lg:hidden">
@@ -62,8 +70,7 @@ export function NavigationMenu() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <div className="flex gap-3 items-center">
-          <ListLink links={links} />
+        <div className="flex items-center gap-3">
           <ModeToggle />
           <Avatar />
         </div>

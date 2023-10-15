@@ -15,6 +15,7 @@ import {
 
 import Avatar from "./avatar";
 import ListLink from "./list-link";
+import TeamSwitcher from "./event-switcher";
 
 const links = [
   {
@@ -44,33 +45,29 @@ export function NavigationMenu() {
 
   return (
     <header className="mb-10">
-      <nav className="flex justify-between w-full items-center py-2 px-4 md:px-10 border-b border-b-slate-400">
+      <nav className="flex justify-between w-full items-center py-3 px-4 md:px-10 border-b border-b-slate-400">
         <div className="flex items-center gap-3">
-          <Link href={"/"}>
-            <h1>WhosIn?</h1>
-          </Link>
-          {/* <div className="flex gap-3 items-center"> */}
+          <TeamSwitcher />
           <ListLink links={links} />
-          {/* </div> */}
         </div>
 
-        <div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild className="flex lg:hidden">
-              <Button className="outline-none" variant="ghost">
-                <MenuIcon />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-              {links.map((link) => (
-                <Link key={link.href} href={link.href}>
-                  <DropdownMenuItem className="cursor-pointer">{link.title}</DropdownMenuItem>
-                </Link>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-0 lg:gap-3">
+          <div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild className="flex lg:hidden">
+                <Button className="outline-none" variant="ghost">
+                  <MenuIcon />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                {links.map((link) => (
+                  <Link key={link.href} href={link.href}>
+                    <DropdownMenuItem className="cursor-pointer">{link.title}</DropdownMenuItem>
+                  </Link>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
           <ModeToggle />
           <Avatar />
         </div>

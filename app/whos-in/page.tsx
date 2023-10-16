@@ -5,7 +5,7 @@ import {currentUser} from "@clerk/nextjs";
 import AssistanceCard from "@/components/cards/assistance-card";
 import {EventData} from "@/lib/types";
 
-import {getEventsByUserId} from "../actions";
+import {getEventsByUserId} from "../api/actions";
 
 export default async function page() {
   const user: User | null = await currentUser();

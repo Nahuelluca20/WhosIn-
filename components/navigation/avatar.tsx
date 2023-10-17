@@ -56,9 +56,9 @@ export default function Avatar() {
         <DropdownMenuItem>
           <SignOutButton />
         </DropdownMenuItem>
-        <DropdownMenuItem>
-          <Link href={"/user-profile"}>User Profile</Link>
-        </DropdownMenuItem>
+        <Link className="cursor-pointer" href={"/user-profile"}>
+          <DropdownMenuItem className="cursor-pointer">User Profile</DropdownMenuItem>
+        </Link>
       </DropdownMenuContent>
     </DropdownMenu>
   );

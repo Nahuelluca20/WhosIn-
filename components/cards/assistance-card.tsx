@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import {Card, CardContent, CardHeader, CardTitle} from "../ui/card";
 
 export default function AssistanceCard({
@@ -5,14 +7,16 @@ export default function AssistanceCard({
   eventTitle,
   unconfirmed,
   totalGuests,
+  eventId,
 }: {
   attend: string;
   eventTitle: string;
   unconfirmed: string;
   totalGuests: string;
+  eventId: string;
 }) {
   return (
-    <div className="">
+    <Link href={`whos-in/${eventId}`}>
       <Card>
         <CardHeader className="flex w-72 flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">{eventTitle}</CardTitle>
@@ -36,9 +40,13 @@ export default function AssistanceCard({
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">Asisten {attend}</div>
-          <p className="text-xs text-muted-foreground">faltan {unconfirmed} por confirmar</p>
+          <p className="text-xs text-muted-foreground">
+            {`falt${unconfirmed === "1" ? "a" : "an"} ${unconfirmed} persona${
+              unconfirmed === "1" ? "" : "s"
+            } por confirmar`}
+          </p>
         </CardContent>
       </Card>
-    </div>
+    </Link>
   );
 }

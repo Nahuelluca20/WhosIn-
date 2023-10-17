@@ -17,8 +17,9 @@ export default async function page() {
         {events.data &&
           events.data.map((event) => (
             <AssistanceCard
-              key={event.ts}
+              key={event.ref.id}
               attend={event.data?.attend ?? ""}
+              eventId={event.ref.id}
               eventTitle={event.data?.event_title ?? ""}
               totalGuests={event.data?.total_guests ?? ""}
               unconfirmed={event.data?.unconfirmed ?? ""}

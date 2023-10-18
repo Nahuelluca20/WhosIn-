@@ -9,7 +9,7 @@ import {Calendar} from "@/components/ui/calendar";
 export default async function page({params}: {params: {id: string}}) {
   const eventData: any = await getEventById(params.id as string);
 
-  console.log(eventData.data[0]?.data.users_attend);
+  // console.log(eventData.data[0]?.data.users_attend);
   let totalGuests = eventData.data[0]?.data.total_guests;
   let usersAttend = eventData.data[0]?.data.users_attend;
   let unconfirmed = eventData.data[0]?.data.unconfirmed;

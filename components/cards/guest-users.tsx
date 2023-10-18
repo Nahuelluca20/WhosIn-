@@ -16,8 +16,6 @@ export default function GuestUsers({
     email: string;
   }[];
 }) {
-  console.log(getTwoFirstLetters("tata ramos"));
-
   return (
     <div className="space-y-8">
       {usersAttend &&

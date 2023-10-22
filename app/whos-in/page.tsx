@@ -30,17 +30,27 @@ export default async function page() {
           </TabsTrigger>
           <TabsTrigger value="past-events">Eventos Pasados</TabsTrigger>
         </TabsList>
-        <TabsContent
-          className="h-full flex-col border-none p-0 data-[state=active]:flex"
-          value="next-events"
-        >
-          {nextEvents.length > 0 && <EventsDisplay events={nextEvents} />}
+        <TabsContent className="" value="next-events">
+          {nextEvents.length > 0 ? (
+            <EventsDisplay events={nextEvents} />
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-[1440px]">
+              <p className="order-2 w-[289.6px] pb-2 text-gray-500 text-2xl">
+                No hay eventos próximos
+              </p>
+            </div>
+          )}
         </TabsContent>
-        <TabsContent
-          className="h-full flex-col border-none p-0 data-[state=active]:flex"
-          value="past-events"
-        >
-          {pastEvents.length > 0 && <EventsDisplay events={pastEvents} />}
+        <TabsContent className="" value="past-events">
+          {pastEvents.length > 0 ? (
+            <EventsDisplay events={pastEvents} />
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-[1440px]">
+              <p className="order-2 w-[289.6px] pb-2 text-gray-500 text-2xl">
+                No hay eventos pasados
+              </p>
+            </div>
+          )}
         </TabsContent>
       </Tabs>
     </main>

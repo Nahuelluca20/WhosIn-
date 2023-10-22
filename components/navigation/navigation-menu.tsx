@@ -47,7 +47,7 @@ export function NavigationMenu() {
           <ListLink links={links} />
         </div>
 
-        <div className="flex items-center gap-0 lg:gap-3">
+        <div className="flex items-center gap-3">
           <div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild className="flex lg:hidden">

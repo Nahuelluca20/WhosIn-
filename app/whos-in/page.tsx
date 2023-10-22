@@ -35,7 +35,7 @@ export default async function page() {
             <EventsDisplay events={nextEvents} />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-[1440px]">
-              <p className="order-2 w-[289.6px] pb-2 text-gray-500 text-2xl">
+              <p className="order-2 w-[289.8px] pb-2 text-gray-500 text-2xl">
                 No hay eventos próximos
               </p>
             </div>
@@ -46,7 +46,7 @@ export default async function page() {
             <EventsDisplay events={pastEvents} />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-[1440px]">
-              <p className="order-2 w-[289.6px] pb-2 text-gray-500 text-2xl">
+              <p className="order-2 w-[289.8px] pb-2 text-gray-500 text-2xl">
                 No hay eventos pasados
               </p>
             </div>

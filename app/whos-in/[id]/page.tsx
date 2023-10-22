@@ -51,13 +51,13 @@ export default async function page({params}: {params: {id: string}}) {
                 </div>
               </div>
               <Link href={placeDirection} target="_blank">
-                <Button className="text-white">Ver dirección</Button>
+                <Button>Ver dirección</Button>
               </Link>
             </aside>
           </section>
         </CardContent>
       </Card>
-      <Card className="col-span-3 w-full max-w-[450px]">
+      <Card className="col-span-3 w-full lg:max-w-[350px]">
         <CardHeader className="">
           <CardTitle className="text-sm font-bold mb-[-6px]">Usuarios que asistirán</CardTitle>
           <CardDescription>Hay {totalGuests} personas invitadas.</CardDescription>

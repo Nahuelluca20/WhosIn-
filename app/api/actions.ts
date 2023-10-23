@@ -5,9 +5,13 @@ import {faunaClient} from "@/lib/fauna";
 import {Ref, UserDb} from "@/lib/types";
 
 export async function getFaunaUserId(userId: string) {
-  const user: UserDb = await faunaClient.query(q.Get(q.Match(q.Index("get_user_id"), userId)));
+  try {
+    const user: UserDb = await faunaClient.query(q.Get(q.Match(q.Index("get_user_id"), userId)));
 
-  return user.ref.id;
+    return user.ref.id;
+  } catch (error) {
+    return "";
+  }
 }
 
 export async function getEventById(eventId: string) {
@@ -22,43 +26,55 @@ export async function getEventById(eventId: string) {
 }
 
 export async function getEventByTeam(teamId: string) {
-  const data = await faunaClient.query(
-    q.Map(
-      q.Paginate(q.Match(q.Index("get_invites_by_team"), q.Ref(q.Collection("teams"), teamId))),
-      q.Lambda("ref", q.Get(q.Var("ref"))),
-    ),
-  );
+  try {
+    const data = await faunaClient.query(
+      q.Map(
+        q.Paginate(q.Match(q.Index("get_invites_by_team"), q.Ref(q.Collection("teams"), teamId))),
+        q.Lambda("ref", q.Get(q.Var("ref"))),
+      ),
+    );
 
-  return data;
+    return data;
+  } catch (error) {
+    return [];
+  }
 }
 
 export async function getTeamsByUserId(userId: string) {
-  const data: Ref[] = await faunaClient.query(
-    q.Select(
-      "data",
-      q.Paginate(q.Match(q.Index("teams_by_member"), q.Ref(q.Collection("users"), userId))),
-    ),
-  );
+  try {
+    const data: Ref[] = await faunaClient.query(
+      q.Select(
+        "data",
+        q.Paginate(q.Match(q.Index("teams_by_member"), q.Ref(q.Collection("users"), userId))),
+      ),
+    );
 
-  return data;
+    return data;
+  } catch (error) {
+    return [];
+  }
 }
 
 export async function getTeamsNamesByUserId(userId: string) {
-  const teamRefs: {data: [Ref[]]} = await faunaClient.query(
-    q.Paginate(q.Match(q.Index("teams_by_member"), q.Ref(q.Collection("users"), userId))),
-  );
+  try {
+    const teamRefs: {data: [Ref[]]} = await faunaClient.query(
+      q.Paginate(q.Match(q.Index("teams_by_member"), q.Ref(q.Collection("users"), userId))),
+    );
 
-  const teamNames = await Promise.all(
-    teamRefs.data.map(async (teamRef) => {
-      const teamData: {team_name: string; members: Ref[]} = await faunaClient.query(
-        q.Select("data", q.Get(teamRef)),
-      );
+    const teamNames = await Promise.all(
+      teamRefs.data.map(async (teamRef) => {
+        const teamData: {team_name: string; members: Ref[]} = await faunaClient.query(
+          q.Select("data", q.Get(teamRef)),
+        );
 
-      return teamData?.team_name;
-    }),
-  );
+        return teamData?.team_name;
+      }),
+    );
 
-  return teamNames;
+    return teamNames;
+  } catch (error) {
+    return [];
+  }
 }
 
 export async function getTeamByMatchUserId(userId: string, teamName: string) {

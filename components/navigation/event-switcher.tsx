@@ -80,6 +80,7 @@ export default function EventSwitcher({className}: EventSwitcherProps) {
   const getTeamsNames = useCallback(async () => {
     const userId = await getFaunaUserId(userIdAuth as string);
     const teamsNames = await getTeamsNamesByUserId(userId);
+
     const teams = teamsNames.map((team) => ({label: team, value: team}));
 
     groups[0].teams = [
@@ -97,10 +98,6 @@ export default function EventSwitcher({className}: EventSwitcherProps) {
         .map((group) => group.teams)
         .flat()
         .find((team) => team.value === searchParams.get("team"));
-
-      if (team?.value) {
-        createQueryString("teams", team?.value);
-      }
 
       if (team) {
         setSelectedTeam(team);

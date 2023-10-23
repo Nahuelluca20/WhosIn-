@@ -21,11 +21,11 @@ export default async function page({
 }) {
   const user: User | null = await currentUser();
   const userId = await getFaunaUserId(user?.id as string);
-  const teamsByUserId: Ref[] = await getTeamsByUserId(userId);
+  // const teamsByUserId: Ref[] = await getTeamsByUserId(userId);
 
   const getTeamByName = await getTeamByMatchUserId(userId, searchParams.team as string);
 
-  const events: EventData = await getEventByTeam(getTeamByName ?? teamsByUserId[0].id);
+  const events: EventData = await getEventByTeam(getTeamByName ?? "");
 
   const currentDate = new Date();
 

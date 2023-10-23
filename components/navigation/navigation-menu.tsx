@@ -46,23 +46,23 @@ export function NavigationMenu() {
           <ListLink links={links} />
         </div>
 
+        <div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild className="flex lg:hidden">
+              <Button className="outline-none" variant="ghost">
+                <MenuIcon />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              {links.map((link) => (
+                <Link key={link.href} href={link.href}>
+                  <DropdownMenuItem className="cursor-pointer">{link.title}</DropdownMenuItem>
+                </Link>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
         <div className="flex items-center gap-3">
-          <div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild className="flex lg:hidden">
-                <Button className="outline-none" variant="ghost">
-                  <MenuIcon />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
-                {links.map((link) => (
-                  <Link key={link.href} href={link.href}>
-                    <DropdownMenuItem className="cursor-pointer">{link.title}</DropdownMenuItem>
-                  </Link>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
           <ModeToggle />
           <Avatar />
         </div>

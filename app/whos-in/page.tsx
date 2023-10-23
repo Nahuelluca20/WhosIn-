@@ -40,7 +40,7 @@ export default async function page({
   return (
     <main className="px-4 grid gap-y-5 justify-center w-full">
       <Tabs className="h-full space-y-6" defaultValue="next-events">
-        <div className="w-full flex items-center justify-between">
+        <div className="w-full gap-y-2 grid md:flex items-center justify-start md:justify-between">
           <TabsList>
             <TabsTrigger className="relative" value="next-events">
               Eventos próximos

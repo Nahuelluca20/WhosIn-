@@ -2,7 +2,10 @@
 import * as React from "react";
 import Link from "next/link";
 import {MenuIcon} from "lucide-react";
-import {useAuth} from "@clerk/nextjs";
+import {useAuth, useUser} from "@clerk/nextjs";
+import {useEffect} from "react";
+
+import {getFaunaUserId, getTeamsNamesByUserId} from "@/app/api/actions";
 
 import {ModeToggle} from "../mode-toggle";
 import {Button} from "../ui/button";

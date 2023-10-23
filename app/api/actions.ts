@@ -1,5 +1,5 @@
 "use server";
-import {query as q} from "faunadb";
+import {Select, query as q} from "faunadb";
 
 import {faunaClient} from "@/lib/fauna";
 import {Ref, UserDb} from "@/lib/types";
@@ -41,6 +41,24 @@ export async function getTeamsByUserId(userId: string) {
   );
 
   return data;
+}
+
+export async function getTeamsNamesByUserId(userId: string) {
+  const teamRefs: {data: [Ref[]]} = await faunaClient.query(
+    q.Paginate(q.Match(q.Index("teams_by_member"), q.Ref(q.Collection("users"), userId))),
+  );
+
+  const teamNames = await Promise.all(
+    teamRefs.data.map(async (teamRef) => {
+      const teamData: {team_name: string; members: Ref[]} = await faunaClient.query(
+        q.Select("data", q.Get(teamRef)),
+      );
+
+      return teamData?.team_name;
+    }),
+  );
+
+  return teamNames;
 }
 
 export async function getTeamByMatchUserId(userId: string, teamName: string) {

@@ -3,7 +3,8 @@
 import * as React from "react";
 import {CaretSortIcon, CheckIcon, PlusCircledIcon} from "@radix-ui/react-icons";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
-import {useCallback} from "react";
+import {useCallback, useEffect, useState} from "react";
+import {useAuth} from "@clerk/nextjs";
 
 import {cn} from "@/lib/utils";
 import {
@@ -36,6 +37,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {getFaunaUserId, getTeamsNamesByUserId} from "@/app/api/actions";
 
 const groups = [
   {
@@ -44,14 +46,6 @@ const groups = [
       {
         label: "Elige grupo",
         value: "",
-      },
-      {
-        label: "Acme Inc.",
-        value: "asado",
-      },
-      {
-        label: "Monsters Inc.",
-        value: "fulbo",
       },
     ],
   },
@@ -64,12 +58,13 @@ type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
 interface EventSwitcherProps extends PopoverTriggerProps {}
 
 export default function EventSwitcher({className}: EventSwitcherProps) {
-  const [open, setOpen] = React.useState(false);
-  const [showNewTeamDialog, setShowNewTeamDialog] = React.useState(false);
-  const [selectedTeam, setSelectedTeam] = React.useState<Team>(groups[0].teams[0]);
+  const [open, setOpen] = useState(false);
+  const [showNewTeamDialog, setShowNewTeamDialog] = useState(false);
+  const [selectedTeam, setSelectedTeam] = useState<Team>(groups[0].teams[0]);
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
+  const {userId: userIdAuth} = useAuth();
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -82,17 +77,36 @@ export default function EventSwitcher({className}: EventSwitcherProps) {
     [searchParams],
   );
 
-  React.useEffect(() => {
+  const getTeamsNames = useCallback(async () => {
+    const userId = await getFaunaUserId(userIdAuth as string);
+    const teamsNames = await getTeamsNamesByUserId(userId);
+    const teams = teamsNames.map((team) => ({label: team, value: team}));
+
+    groups[0].teams = [
+      {
+        label: "Elige grupo",
+        value: "",
+      },
+      ...teams,
+    ];
+  }, []);
+
+  useEffect(() => {
     if (searchParams.get("team")) {
       const team = groups
         .map((group) => group.teams)
         .flat()
         .find((team) => team.value === searchParams.get("team"));
 
+      if (team?.value) {
+        createQueryString("teams", team?.value);
+      }
+
       if (team) {
         setSelectedTeam(team);
       }
     }
+    getTeamsNames();
   }, [searchParams]);
 
   return (

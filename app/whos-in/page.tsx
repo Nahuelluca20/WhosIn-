@@ -2,15 +2,30 @@ import type {User} from "@clerk/nextjs/api";
 
 import {currentUser} from "@clerk/nextjs";
 
-import {EventData} from "@/lib/types";
+import {EventData, Ref} from "@/lib/types";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
-import EventsDisplay from "@/components/layouts/events-display";
+import EventsDisplay from "@/components/layouts/events/events-display";
 
-import {getEventsByUserId} from "../api/actions";
+import {
+  getEventByTeam,
+  getFaunaUserId,
+  getTeamByMatchUserId,
+  getTeamsByUserId,
+} from "../api/actions";
 
-export default async function page() {
+export default async function page({
+  searchParams,
+}: {
+  searchParams: {[key: string]: string | string[] | undefined};
+}) {
   const user: User | null = await currentUser();
-  const events: EventData = await getEventsByUserId(user?.id as string);
+  const userId = await getFaunaUserId(user?.id as string);
+  const teamsByUserId: Ref[] = await getTeamsByUserId(userId);
+
+  const getTeamByName = await getTeamByMatchUserId(userId, searchParams.team as string);
+
+  const events: EventData = await getEventByTeam(getTeamByName ?? teamsByUserId[0].id);
+
   const currentDate = new Date();
 
   const pastEvents = (events.data ?? []).filter(

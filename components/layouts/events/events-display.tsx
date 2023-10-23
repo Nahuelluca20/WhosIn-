@@ -1,6 +1,6 @@
 import {EventObject} from "@/lib/types";
 
-import AssistanceCard from "../cards/assistance-card";
+import AssistanceCard from "../../cards/assistance-card";
 
 export default function EventsDisplay({events}: {events: EventObject[]}) {
   return (

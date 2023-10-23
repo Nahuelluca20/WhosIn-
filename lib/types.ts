@@ -12,6 +12,7 @@ export interface Data {
   place_name: string;
   place_direction: string;
   event_date: string;
+  team: Ref;
 }
 
 export interface EventObject {
@@ -22,4 +23,13 @@ export interface EventObject {
 
 export interface EventData {
   data?: EventObject[];
+}
+
+export interface UserDb {
+  ref: Ref;
+  ts: number;
+  data: {
+    name: string;
+    user_id: string;
+  };
 }

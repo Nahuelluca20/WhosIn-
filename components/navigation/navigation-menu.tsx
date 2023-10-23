@@ -24,7 +24,7 @@ const links = [
   },
   {
     title: "My whosin",
-    href: "/whos-in",
+    href: "/whos-in?team=asado",
   },
   {
     title: "Help",

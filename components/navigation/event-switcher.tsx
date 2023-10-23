@@ -2,6 +2,8 @@
 
 import * as React from "react";
 import {CaretSortIcon, CheckIcon, PlusCircledIcon} from "@radix-ui/react-icons";
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import {useCallback} from "react";
 
 import {cn} from "@/lib/utils";
 import {
@@ -37,24 +39,15 @@ import {
 
 const groups = [
   {
-    label: "Personal Account",
-    teams: [
-      {
-        label: "Alicia Koch",
-        value: "personal",
-      },
-    ],
-  },
-  {
     label: "Teams",
     teams: [
       {
         label: "Acme Inc.",
-        value: "acme-inc",
+        value: "asado",
       },
       {
         label: "Monsters Inc.",
-        value: "monsters",
+        value: "fulbo",
       },
     ],
   },
@@ -70,6 +63,33 @@ export default function EventSwitcher({className}: EventSwitcherProps) {
   const [open, setOpen] = React.useState(false);
   const [showNewTeamDialog, setShowNewTeamDialog] = React.useState(false);
   const [selectedTeam, setSelectedTeam] = React.useState<Team>(groups[0].teams[0]);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams);
+
+      params.set(name, value);
+
+      return params.toString();
+    },
+    [searchParams],
+  );
+
+  React.useEffect(() => {
+    if (searchParams.get("team")) {
+      const team = groups
+        .map((group) => group.teams)
+        .flat()
+        .find((team) => team.value === searchParams.get("team"));
+
+      if (team) {
+        setSelectedTeam(team);
+      }
+    }
+  }, [searchParams]);
 
   return (
     <Dialog open={showNewTeamDialog} onOpenChange={setShowNewTeamDialog}>
@@ -106,6 +126,7 @@ export default function EventSwitcher({className}: EventSwitcherProps) {
                       className="text-sm"
                       onSelect={() => {
                         setSelectedTeam(team);
+                        router.push(pathname + "?" + createQueryString("team", team.value));
                         setOpen(false);
                       }}
                     >

@@ -1,11 +1,18 @@
+import type {User} from "@clerk/nextjs/api";
+
+import {currentUser} from "@clerk/nextjs";
+
 import GuestUsers from "@/components/cards/guest-users";
 import {Card, CardHeader, CardTitle, CardDescription, CardContent} from "@/components/ui/card";
 
-import {getEventById} from "./api/actions";
+import {getEventById, getFaunaUserId} from "./api/actions";
 
 export default async function Home() {
-  const eventData: any = await getEventById("378690013606445137" as string);
+  const eventData: any = await getEventById("379312836386488400" as string);
   let usersAttend = eventData.data[0]?.data.users_attend;
+  const user: User | null = await currentUser();
+
+  const userId = await getFaunaUserId(user?.id as string);
 
   return (
     <main className="px-4 w-full max-w-[1440px] mx-auto ">

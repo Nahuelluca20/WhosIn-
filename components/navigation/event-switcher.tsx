@@ -42,6 +42,10 @@ const groups = [
     label: "Teams",
     teams: [
       {
+        label: "Elige grupo",
+        value: "",
+      },
+      {
         label: "Acme Inc.",
         value: "asado",
       },

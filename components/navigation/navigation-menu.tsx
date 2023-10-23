@@ -15,7 +15,6 @@ import {
 
 import Avatar from "./avatar";
 import ListLink from "./list-link";
-import EventSwitcherProps from "./event-switcher";
 
 const links = [
   {
@@ -24,7 +23,7 @@ const links = [
   },
   {
     title: "My whosin",
-    href: "/whos-in?team=asado",
+    href: "/whos-in",
   },
   {
     title: "Help",
@@ -43,7 +42,7 @@ export function NavigationMenu() {
     <header className="mb-10">
       <nav className="flex justify-between w-full items-center py-3 px-4 md:px-10 border-b border-b-slate-400">
         <div className="flex items-center gap-3">
-          <EventSwitcherProps />
+          <h3 className="font-bold">WhosIn?</h3>
           <ListLink links={links} />
         </div>
 

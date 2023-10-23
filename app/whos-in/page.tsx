@@ -5,6 +5,7 @@ import {currentUser} from "@clerk/nextjs";
 import {EventData, Ref} from "@/lib/types";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import EventsDisplay from "@/components/layouts/events/events-display";
+import EventSwitcher from "@/components/navigation/event-switcher";
 
 import {
   getEventByTeam,
@@ -39,32 +40,51 @@ export default async function page({
   return (
     <main className="px-4 grid gap-y-5 justify-center w-full">
       <Tabs className="h-full space-y-6" defaultValue="next-events">
-        <TabsList>
-          <TabsTrigger className="relative" value="next-events">
-            Eventos próximos
-          </TabsTrigger>
-          <TabsTrigger value="past-events">Eventos Pasados</TabsTrigger>
-        </TabsList>
+        <div className="w-full flex items-center justify-between">
+          <TabsList>
+            <TabsTrigger className="relative" value="next-events">
+              Eventos próximos
+            </TabsTrigger>
+            <TabsTrigger value="past-events">Eventos Pasados</TabsTrigger>
+          </TabsList>
+          <EventSwitcher />
+        </div>
         <TabsContent className="" value="next-events">
-          {nextEvents.length > 0 ? (
-            <EventsDisplay events={nextEvents} />
-          ) : (
+          {!searchParams.team ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-[1440px]">
-              <p className="order-2 w-[289.8px] pb-2 text-gray-500 text-2xl">
-                No hay eventos próximos
-              </p>
+              <p className="order-2 w-[289.8px] pb-2 text-gray-500 text-2xl">Selecciona un grupo</p>
             </div>
+          ) : (
+            <>
+              {nextEvents.length > 0 ? (
+                <EventsDisplay events={nextEvents} />
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-[1440px]">
+                  <p className="order-2 w-[289.8px] pb-2 text-gray-500 text-2xl">
+                    No hay eventos próximos
+                  </p>
+                </div>
+              )}
+            </>
           )}
         </TabsContent>
         <TabsContent className="" value="past-events">
-          {pastEvents.length > 0 ? (
-            <EventsDisplay events={pastEvents} />
-          ) : (
+          {!searchParams.team ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-[1440px]">
-              <p className="order-2 w-[289.8px] pb-2 text-gray-500 text-2xl">
-                No hay eventos pasados
-              </p>
+              <p className="order-2 w-[289.8px] pb-2 text-gray-500 text-2xl">Selecciona un grupo</p>
             </div>
+          ) : (
+            <>
+              {pastEvents.length > 0 ? (
+                <EventsDisplay events={pastEvents} />
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-[1440px]">
+                  <p className="order-2 w-[289.8px] pb-2 text-gray-500 text-2xl">
+                    No hay eventos pasados
+                  </p>
+                </div>
+              )}
+            </>
           )}
         </TabsContent>
       </Tabs>

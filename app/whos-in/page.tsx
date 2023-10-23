@@ -2,17 +2,12 @@ import type {User} from "@clerk/nextjs/api";
 
 import {currentUser} from "@clerk/nextjs";
 
-import {EventData, Ref} from "@/lib/types";
+import {EventData} from "@/lib/types";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import EventsDisplay from "@/components/layouts/events/events-display";
 import EventSwitcher from "@/components/navigation/event-switcher";
 
-import {
-  getEventByTeam,
-  getFaunaUserId,
-  getTeamByMatchUserId,
-  getTeamsByUserId,
-} from "../api/actions";
+import {getEventByTeam, getFaunaUserId, getTeamByMatchUserId} from "../api/actions";
 
 export default async function page({
   searchParams,

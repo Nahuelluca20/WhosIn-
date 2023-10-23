@@ -42,7 +42,9 @@ export function NavigationMenu() {
     <header className="mb-10">
       <nav className="flex justify-between w-full items-center py-3 px-4 md:px-10 border-b border-b-slate-400">
         <div className="flex items-center gap-3">
-          <h3 className="font-bold">WhosIn?</h3>
+          <Link href={"/"}>
+            <h3 className="font-bold">WhosIn?</h3>
+          </Link>
           <ListLink links={links} />
         </div>
 

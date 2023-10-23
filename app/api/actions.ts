@@ -1,5 +1,5 @@
 "use server";
-import {Select, query as q} from "faunadb";
+import {query as q} from "faunadb";
 
 import {faunaClient} from "@/lib/fauna";
 import {Ref, UserDb} from "@/lib/types";

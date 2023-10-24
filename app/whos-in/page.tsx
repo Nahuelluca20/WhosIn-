@@ -9,6 +9,14 @@ import EventSwitcher from "@/components/navigation/event-switcher";
 
 import {getEventByTeam, getFaunaUserId, getTeamByMatchUserId} from "../api/actions";
 
+function EmptyEvents({text}: {text: string}) {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-[1440px]">
+      <p className="order-2 w-[289.8px] pb-2 text-gray-500 text-2xl">{text}</p>
+    </div>
+  );
+}
+
 export default async function page({
   searchParams,
 }: {
@@ -16,7 +24,6 @@ export default async function page({
 }) {
   const user: User | null = await currentUser();
   const userId = await getFaunaUserId(user?.id as string);
-  // const teamsByUserId: Ref[] = await getTeamsByUserId(userId);
 
   const getTeamByName = await getTeamByMatchUserId(userId, searchParams.team as string);
 
@@ -44,40 +51,28 @@ export default async function page({
           </TabsList>
           <EventSwitcher />
         </div>
-        <TabsContent className="" value="next-events">
+        <TabsContent value="next-events">
           {!searchParams.team ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-[1440px]">
-              <p className="order-2 w-[289.8px] pb-2 text-gray-500 text-2xl">Selecciona un grupo</p>
-            </div>
+            <EmptyEvents text={"Selecciona un grupo"} />
           ) : (
             <>
               {nextEvents.length > 0 ? (
                 <EventsDisplay events={nextEvents} />
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-[1440px]">
-                  <p className="order-2 w-[289.8px] pb-2 text-gray-500 text-2xl">
-                    No hay eventos próximos
-                  </p>
-                </div>
+                <EmptyEvents text={"No hay eventos próximos"} />
               )}
             </>
           )}
         </TabsContent>
-        <TabsContent className="" value="past-events">
+        <TabsContent value="past-events">
           {!searchParams.team ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-[1440px]">
-              <p className="order-2 w-[289.8px] pb-2 text-gray-500 text-2xl">Selecciona un grupo</p>
-            </div>
+            <EmptyEvents text={"Selecciona un grupo"} />
           ) : (
             <>
               {pastEvents.length > 0 ? (
                 <EventsDisplay events={pastEvents} />
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-[1440px]">
-                  <p className="order-2 w-[289.8px] pb-2 text-gray-500 text-2xl">
-                    No hay eventos pasados
-                  </p>
-                </div>
+                <EmptyEvents text={"No hay eventos pasados"} />
               )}
             </>
           )}

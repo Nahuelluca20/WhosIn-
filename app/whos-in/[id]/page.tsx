@@ -1,6 +1,5 @@
 import Link from "next/link";
-import {parse} from "date-fns";
-import {es} from "date-fns/locale";
+import {format, parse} from "date-fns";
 
 import {getEventById} from "@/app/api/actions";
 import GuestUsers from "@/components/cards/guest-users";
@@ -20,7 +19,8 @@ export default async function page({params}: {params: {id: string}}) {
   let placeName = eventData.data[0]?.data.place_name;
   let eventDate = eventData.data[0]?.data.event_date;
 
-  const dateParse = parse(eventDate, "dd/MM/yyyy", new Date(), {locale: es});
+  const dateParse = parse(eventDate, "dd/MM/yyyy", new Date());
+  const dateParseLetters = format(dateParse, "PP");
 
   return (
     <main className="w-full grid pb-5 md:flex gap-5 justify-center px-5 md:px-10">
@@ -39,6 +39,10 @@ export default async function page({params}: {params: {id: string}}) {
                 <div>
                   <span className="text-sm font-bold">Nombre del lugar:</span>
                   <p className="text-sm">{placeName}</p>
+                </div>
+                <div>
+                  <span className="text-sm font-bold">Fecha:</span>
+                  <p className="text-sm">{dateParseLetters}</p>
                 </div>
                 <div>
                   <span className="text-sm font-bold">Personas invitadas:</span>

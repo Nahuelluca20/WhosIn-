@@ -1,5 +1,6 @@
 import Link from "next/link";
 import {parse} from "date-fns";
+import {es} from "date-fns/locale";
 
 import {getEventById} from "@/app/api/actions";
 import GuestUsers from "@/components/cards/guest-users";
@@ -10,7 +11,6 @@ import {Calendar} from "@/components/ui/calendar";
 export default async function page({params}: {params: {id: string}}) {
   const eventData: any = await getEventById(params.id as string);
 
-  // console.log(eventData.data[0]?.data.users_attend);
   let totalGuests = eventData.data[0]?.data.total_guests;
   let usersAttend = eventData.data[0]?.data.users_attend;
   let unconfirmed = eventData.data[0]?.data.unconfirmed;
@@ -19,8 +19,8 @@ export default async function page({params}: {params: {id: string}}) {
   let placeDirection = eventData.data[0]?.data.place_direction;
   let placeName = eventData.data[0]?.data.place_name;
   let eventDate = eventData.data[0]?.data.event_date;
-  // const dateParse = parse(eventDate, "MM-dd-yyyy", new Date());
-  const dateParse = parse(eventDate, "dd/MM/yyyy", new Date());
+
+  const dateParse = parse(eventDate, "dd/MM/yyyy", new Date(), {locale: es});
 
   return (
     <main className="w-full grid pb-5 md:flex gap-5 justify-center px-5 md:px-10">
@@ -71,4 +71,7 @@ export default async function page({params}: {params: {id: string}}) {
       </Card>
     </main>
   );
+}
+function utcToZonedTime(dateParse: Date, timeZone: string) {
+  throw new Error("Function not implemented.");
 }

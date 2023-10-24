@@ -1,5 +1,5 @@
 import Link from "next/link";
-import {format, parse} from "date-fns";
+import {parse} from "date-fns";
 
 import {getEventById} from "@/app/api/actions";
 import GuestUsers from "@/components/cards/guest-users";
@@ -19,7 +19,8 @@ export default async function page({params}: {params: {id: string}}) {
   let placeDirection = eventData.data[0]?.data.place_direction;
   let placeName = eventData.data[0]?.data.place_name;
   let eventDate = eventData.data[0]?.data.event_date;
-  const dateParse = parse(eventDate, "MM-dd-yyyy", new Date());
+  // const dateParse = parse(eventDate, "MM-dd-yyyy", new Date());
+  const dateParse = parse(eventDate, "dd/MM/yyyy", new Date());
 
   return (
     <main className="w-full grid pb-5 md:flex gap-5 justify-center px-5 md:px-10">

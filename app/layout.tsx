@@ -1,4 +1,4 @@
-import "../path/to/timeZone";
+import "../timezone";
 import "./globals.css";
 import type {Metadata} from "next";
 

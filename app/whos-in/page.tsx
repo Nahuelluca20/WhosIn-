@@ -33,11 +33,11 @@ export default async function page({
   const currentDate = new Date();
 
   const pastEvents = (events.data ?? []).filter(
-    (event) => parse(event.data?.event_date as string, "dd/MM/yyyy", new Date()) < currentDate,
+    (event) => parse(event.data?.event_date as string, "dd/MM/yyyy", new Date()) <= currentDate,
   );
 
   const nextEvents = (events.data ?? []).filter(
-    (event) => parse(event.data?.event_date as string, "dd/MM/yyyy", new Date()) > currentDate,
+    (event) => parse(event.data?.event_date as string, "dd/MM/yyyy", new Date()) >= currentDate,
   );
 
   return (

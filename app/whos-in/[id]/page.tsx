@@ -17,7 +17,7 @@ export default async function page({params}: {params: {id: string}}) {
   let eventTitle = eventData.data[0]?.data.event_title;
   let placeDirection = eventData.data[0]?.data.place_direction;
   let placeName = eventData.data[0]?.data.place_name;
-  let dayFormat = new Date(eventData.data[0]?.data.event_date);
+  let day = eventData.data[0]?.data.event_date;
 
   return (
     <main className="w-full grid pb-5 md:flex gap-5 justify-center px-5 md:px-10">
@@ -29,7 +29,7 @@ export default async function page({params}: {params: {id: string}}) {
         <CardContent className="grid gap-2">
           <section className="grid xl:flex gap-5">
             <div className="w-fit mx-auto xl:mx-0">
-              <CalendarClient day={dayFormat} />
+              <CalendarClient day={day} />
             </div>
             <aside className="grid content-between justify-center gap-2">
               <div className="grid grid-cols-2 content-start gap-x-6 gap-y-8">

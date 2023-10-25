@@ -1,7 +1,6 @@
 import type {User} from "@clerk/nextjs/api";
 
 import {currentUser} from "@clerk/nextjs";
-import {parse} from "date-fns";
 
 import {EventData} from "@/lib/types";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
@@ -33,11 +32,11 @@ export default async function page({
   const currentDate = new Date();
 
   const pastEvents = (events.data ?? []).filter(
-    (event) => parse(event.data?.event_date as string, "dd/MM/yyyy", new Date()) <= currentDate,
+    (event) => new Date(event.data?.event_date as string) < currentDate,
   );
 
   const nextEvents = (events.data ?? []).filter(
-    (event) => parse(event.data?.event_date as string, "dd/MM/yyyy", new Date()) >= currentDate,
+    (event) => new Date(event.data?.event_date as string) > currentDate,
   );
 
   return (

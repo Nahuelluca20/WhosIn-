@@ -4,6 +4,7 @@ import {query as q} from "faunadb";
 import {faunaClient} from "@/lib/fauna";
 import {Ref, UserDb} from "@/lib/types";
 
+// Get fauna id by Clerck userId
 export async function getFaunaUserId(userId: string) {
   try {
     const user: UserDb = await faunaClient.query(q.Get(q.Match(q.Index("get_user_id"), userId)));
@@ -14,6 +15,7 @@ export async function getFaunaUserId(userId: string) {
   }
 }
 
+// Get one sigle event/invite by eventId
 export async function getEventById(eventId: string) {
   const data = await faunaClient.query(
     q.Map(
@@ -25,6 +27,7 @@ export async function getEventById(eventId: string) {
   return data;
 }
 
+// Get all event/invite in a team/group by teamId
 export async function getEventByTeam(teamId: string) {
   try {
     const data = await faunaClient.query(
@@ -40,6 +43,7 @@ export async function getEventByTeam(teamId: string) {
   }
 }
 
+// Get all team/group in a user by userId(fauna id)
 export async function getTeamsByUserId(userId: string) {
   try {
     const data: Ref[] = await faunaClient.query(
@@ -55,6 +59,7 @@ export async function getTeamsByUserId(userId: string) {
   }
 }
 
+// Get all team/group names in a user by userId(fauna id)
 export async function getTeamsNamesByUserId(userId: string) {
   try {
     const teamRefs: {data: [Ref[]]} = await faunaClient.query(
@@ -77,6 +82,7 @@ export async function getTeamsNamesByUserId(userId: string) {
   }
 }
 
+// Get team by teamName and userId when matching teamName and userId
 export async function getTeamByMatchUserId(userId: string, teamName: string) {
   try {
     const teamId: string = await faunaClient.query(

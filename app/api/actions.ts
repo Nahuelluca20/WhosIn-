@@ -104,20 +104,58 @@ export async function getTeamByMatchUserId(userId: string, teamName: string) {
   }
 }
 
+// Create user by userId provide by Clerck
+export async function createUserByClerkId(id: string, userNames: string, emailAddresses: string) {
+  const user: UserDb = await faunaClient.query(
+    q.Create(q.Collection("users"), {
+      data: {
+        name: userNames,
+        email: emailAddresses,
+        user_id: id,
+      },
+    }),
+  );
+
+  return user;
+}
+
 // Get de userId provide by Clerck
-export async function createGroup(userId: string, groupName: string) {
+export async function createGroup(
+  userId: string,
+  groupName: string,
+  emailAddresses?: string,
+  userNames?: string,
+) {
   try {
     const id = await getFaunaUserId(userId);
-    const team = await faunaClient.query(
-      q.Create(q.Collection("teams"), {
-        data: {
-          team_name: groupName,
-          members: [q.Ref(q.Collection("users"), id)],
-        },
-      }),
-    );
 
-    return team;
+    if (!id && emailAddresses && userNames) {
+      const user: UserDb = await createUserByClerkId(userId, userNames, emailAddresses);
+
+      const id = await getFaunaUserId(userId);
+
+      const team = await faunaClient.query(
+        q.Create(q.Collection("teams"), {
+          data: {
+            team_name: groupName,
+            members: [q.Ref(q.Collection("users"), id)],
+          },
+        }),
+      );
+
+      return team;
+    } else {
+      const team = await faunaClient.query(
+        q.Create(q.Collection("teams"), {
+          data: {
+            team_name: groupName,
+            members: [q.Ref(q.Collection("users"), id)],
+          },
+        }),
+      );
+
+      return team;
+    }
   } catch (error) {
     console.log(error);
   }

@@ -30,6 +30,7 @@ export interface UserDb {
   ts: number;
   data: {
     name: string;
+    email: string;
     user_id: string;
   };
 }

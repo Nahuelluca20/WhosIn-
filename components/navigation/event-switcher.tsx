@@ -4,7 +4,7 @@ import * as React from "react";
 import {CaretSortIcon, CheckIcon, PlusCircledIcon} from "@radix-ui/react-icons";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {useCallback, useEffect, useState} from "react";
-import {useAuth} from "@clerk/nextjs";
+import {useAuth, useUser} from "@clerk/nextjs";
 
 import {cn} from "@/lib/utils";
 import {
@@ -59,6 +59,7 @@ export default function EventSwitcher({className}: EventSwitcherProps) {
   const router = useRouter();
   const pathname = usePathname();
   const {userId: userIdAuth} = useAuth();
+  const {user} = useUser();
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -84,6 +85,7 @@ export default function EventSwitcher({className}: EventSwitcherProps) {
       },
       ...teams,
     ];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -98,6 +100,7 @@ export default function EventSwitcher({className}: EventSwitcherProps) {
       }
     }
     getTeamsNames();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams, showNewTeamDialog]);
 
   return (
@@ -202,7 +205,12 @@ export default function EventSwitcher({className}: EventSwitcherProps) {
           <Button
             type="submit"
             onClick={async () => {
-              await createGroup(userIdAuth as string, groupName);
+              await createGroup(
+                userIdAuth as string,
+                groupName,
+                user?.emailAddresses[0].emailAddress,
+                user?.firstName?.concat(" ", user?.lastName as string),
+              );
               await setShowNewTeamDialog(false);
             }}
           >

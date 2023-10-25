@@ -4,7 +4,6 @@ import {getEventById} from "@/app/api/actions";
 import GuestUsers from "@/components/cards/guest-users";
 import {Button} from "@/components/ui/button";
 import {Card, CardHeader, CardTitle, CardDescription, CardContent} from "@/components/ui/card";
-import {Calendar} from "@/components/ui/calendar";
 import CalendarClient from "@/components/calendar-client";
 
 export default async function page({params}: {params: {id: string}}) {

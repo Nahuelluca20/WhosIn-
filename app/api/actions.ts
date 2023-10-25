@@ -98,6 +98,25 @@ export async function getTeamByMatchUserId(userId: string, teamName: string) {
   }
 }
 
+// Get de userId provide by Clerck
+export async function createGroup(userId: string, groupName: string) {
+  try {
+    const id = await getFaunaUserId(userId);
+    const team = await faunaClient.query(
+      q.Create(q.Collection("teams"), {
+        data: {
+          team_name: groupName,
+          members: [q.Ref(q.Collection("users"), id)],
+        },
+      }),
+    );
+
+    return team;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 //Upadate/Add event example
 
 // Update(
@@ -119,9 +138,9 @@ export async function getTeamByMatchUserId(userId: string, teamName: string) {
 //     data: {
 //       user: Select('ref', Get(Match(Index('user_by_id'), "user_2WlOHpf16CvOqiIDBnq6m2UoxOv"))),
 //       team_name: "asado",
-//       team_events: [
-//         Ref(Collection("invites"), "379300542550114384"),
-//       ]
+//       members: [
+//          Ref(Collection("users"), "379297642900881489")
+//        ]
 //     }
 //   }
 // )

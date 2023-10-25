@@ -30,14 +30,7 @@ import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {getFaunaUserId, getTeamsNamesByUserId} from "@/app/api/actions";
+import {createGroup, getFaunaUserId, getTeamsNamesByUserId} from "@/app/api/actions";
 
 const groups = [
   {
@@ -60,6 +53,7 @@ interface EventSwitcherProps extends PopoverTriggerProps {}
 export default function EventSwitcher({className}: EventSwitcherProps) {
   const [open, setOpen] = useState(false);
   const [showNewTeamDialog, setShowNewTeamDialog] = useState(false);
+  const [groupName, setGroupName] = useState("");
   const [selectedTeam, setSelectedTeam] = useState<Team>(groups[0].teams[0]);
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -104,7 +98,7 @@ export default function EventSwitcher({className}: EventSwitcherProps) {
       }
     }
     getTeamsNames();
-  }, [searchParams]);
+  }, [searchParams, showNewTeamDialog]);
 
   return (
     <Dialog open={showNewTeamDialog} onOpenChange={setShowNewTeamDialog}>
@@ -176,7 +170,7 @@ export default function EventSwitcher({className}: EventSwitcherProps) {
                     }}
                   >
                     <PlusCircledIcon className="mr-2 h-5 w-5" />
-                    Create Team
+                    Crear grupo
                   </CommandItem>
                 </DialogTrigger>
               </CommandGroup>
@@ -186,32 +180,18 @@ export default function EventSwitcher({className}: EventSwitcherProps) {
       </Popover>
       <DialogContent className="w-[360px]">
         <DialogHeader>
-          <DialogTitle>Create team</DialogTitle>
-          <DialogDescription>Add a new team to manage products and customers.</DialogDescription>
+          <DialogTitle>Crear grupo</DialogTitle>
+          <DialogDescription>Añade un grupo para añadir eventos.</DialogDescription>
         </DialogHeader>
         <div>
           <div className="space-y-4 py-2 pb-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Team name</Label>
-              <Input id="name" placeholder="Acme Inc." />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="plan">Subscription plan</Label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a plan" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="free">
-                    <span className="font-medium">Free</span> -{" "}
-                    <span className="text-muted-foreground">Trial for two weeks</span>
-                  </SelectItem>
-                  <SelectItem value="pro">
-                    <span className="font-medium">Pro</span> -{" "}
-                    <span className="text-muted-foreground">$9/month per user</span>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
+              <Label htmlFor="name">Group name</Label>
+              <Input
+                id="name"
+                placeholder="Acme Inc."
+                onChange={(e) => setGroupName(e.target.value)}
+              />
             </div>
           </div>
         </div>
@@ -219,7 +199,15 @@ export default function EventSwitcher({className}: EventSwitcherProps) {
           <Button variant="outline" onClick={() => setShowNewTeamDialog(false)}>
             Cancel
           </Button>
-          <Button type="submit">Continue</Button>
+          <Button
+            type="submit"
+            onClick={async () => {
+              await createGroup(userIdAuth as string, groupName);
+              await setShowNewTeamDialog(false);
+            }}
+          >
+            Create
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

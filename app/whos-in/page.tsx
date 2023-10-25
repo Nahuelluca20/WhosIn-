@@ -31,13 +31,21 @@ export default async function page({
 
   const currentDate = new Date();
 
-  const pastEvents = (events.data ?? []).filter(
-    (event) => new Date(event.data?.event_date as string) < currentDate,
-  );
+  const pastEvents = (events.data ?? []).filter((event) => {
+    const eventDate = new Date(event.data?.event_date as string);
 
-  const nextEvents = (events.data ?? []).filter(
-    (event) => new Date(event.data?.event_date as string) > currentDate,
-  );
+    eventDate.setDate(eventDate.getDate() + 1); // Sumar un día
+
+    return eventDate < currentDate;
+  });
+
+  const nextEvents = (events.data ?? []).filter((event) => {
+    const eventDate = new Date(event.data?.event_date as string);
+
+    eventDate.setDate(eventDate.getDate() + 1); // Sumar un día
+
+    return eventDate > currentDate;
+  });
 
   return (
     <main className="px-4 grid gap-y-5 justify-center w-full">

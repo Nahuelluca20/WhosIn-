@@ -1,4 +1,5 @@
 import Link from "next/link";
+import {format} from "date-fns";
 
 import {getEventById} from "@/app/api/actions";
 import GuestUsers from "@/components/cards/guest-users";
@@ -18,6 +19,8 @@ export default async function page({params}: {params: {id: string}}) {
   let placeName = eventData.data[0]?.data.place_name;
   let day = eventData.data[0]?.data.event_date;
 
+  let dayInLetters = format(new Date(day), "PP");
+
   return (
     <main className="w-full grid pb-5 md:flex gap-5 justify-center px-5 md:px-10">
       <Card className="col-span-3 w-full max-w-[750px]">
@@ -35,6 +38,10 @@ export default async function page({params}: {params: {id: string}}) {
                 <div>
                   <span className="text-sm font-bold">Nombre del lugar:</span>
                   <p className="text-sm">{placeName}</p>
+                </div>
+                <div>
+                  <span className="text-sm font-bold">Fecha:</span>
+                  <p className="text-sm">{dayInLetters}</p>
                 </div>
                 <div>
                   <span className="text-sm font-bold">Personas invitadas:</span>

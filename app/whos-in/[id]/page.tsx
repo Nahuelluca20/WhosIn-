@@ -5,11 +5,11 @@ import GuestUsers from "@/components/cards/guest-users";
 import {Button} from "@/components/ui/button";
 import {Card, CardHeader, CardTitle, CardDescription, CardContent} from "@/components/ui/card";
 import {Calendar} from "@/components/ui/calendar";
+import CalendarClient from "@/components/calendar-client";
 
 export default async function page({params}: {params: {id: string}}) {
   const eventData: any = await getEventById(params.id as string);
 
-  // console.log(eventData.data[0]?.data.users_attend);
   let totalGuests = eventData.data[0]?.data.total_guests;
   let usersAttend = eventData.data[0]?.data.users_attend;
   let unconfirmed = eventData.data[0]?.data.unconfirmed;
@@ -29,7 +29,7 @@ export default async function page({params}: {params: {id: string}}) {
         <CardContent className="grid gap-2">
           <section className="grid xl:flex gap-5">
             <div className="w-fit mx-auto xl:mx-0">
-              <Calendar className="rounded-md border" mode="single" selected={dayFormat} />
+              <CalendarClient day={dayFormat} />
             </div>
             <aside className="grid content-between justify-center gap-2">
               <div className="grid grid-cols-2 content-start gap-x-6 gap-y-8">

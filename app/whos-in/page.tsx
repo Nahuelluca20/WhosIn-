@@ -11,7 +11,7 @@ import {getEventByTeam, getFaunaUserId, getTeamByMatchUserId} from "../api/actio
 
 function EmptyEvents({text}: {text: string}) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-[1440px]">
+    <div className="flex flex-wrap justify-center md:justify-start sm:justify-start gap-4 w-full max-w-[1440px]">
       <p className="w-[289.8px] pb-2 text-gray-500 text-2xl">{text}</p>
     </div>
   );
@@ -48,9 +48,9 @@ export default async function page({
   });
 
   return (
-    <main className="px-4 grid gap-y-5 justify-center w-full">
-      <Tabs className="h-full space-y-6" defaultValue="next-events">
-        <div className="w-full gap-y-2 grid md:flex items-center justify-start md:justify-between">
+    <main className="px-4 2xl:px-0 gap-y-5 justify-center mx-auto w-full max-w-[1440px] ">
+      <Tabs className="h-full w-full space-y-6" defaultValue="next-events">
+        <div className="mx-auto w-[315px] sm:w-full max-w-[1440px] gap-y-2 flex flex-wrap items-center sm:justify-between">
           <TabsList>
             <TabsTrigger className="relative" value="next-events">
               Eventos próximos

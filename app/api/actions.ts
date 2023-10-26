@@ -119,7 +119,21 @@ export async function createUserByClerkId(id: string, userNames: string, emailAd
   return user;
 }
 
-// Get de userId provide by Clerck
+// Create group by id
+async function createGroupByClerkId(id: string, groupName: string) {
+  const team = await faunaClient.query(
+    q.Create(q.Collection("teams"), {
+      data: {
+        team_name: groupName,
+        members: [q.Ref(q.Collection("users"), id)],
+      },
+    }),
+  );
+
+  return team;
+}
+
+// Create group and check if user exist in fauna
 export async function createGroup(
   userId: string,
   groupName: string,
@@ -130,88 +144,20 @@ export async function createGroup(
     const id = await getFaunaUserId(userId);
 
     if (!id && emailAddresses && userNames) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const user: UserDb = await createUserByClerkId(userId, userNames, emailAddresses);
 
       const id = await getFaunaUserId(userId);
 
-      const team = await faunaClient.query(
-        q.Create(q.Collection("teams"), {
-          data: {
-            team_name: groupName,
-            members: [q.Ref(q.Collection("users"), id)],
-          },
-        }),
-      );
+      const team = createGroupByClerkId(id, groupName);
 
       return team;
     } else {
-      const team = await faunaClient.query(
-        q.Create(q.Collection("teams"), {
-          data: {
-            team_name: groupName,
-            members: [q.Ref(q.Collection("users"), id)],
-          },
-        }),
-      );
+      const team = createGroupByClerkId(id, groupName);
 
       return team;
     }
   } catch (error) {
-    console.log(error);
+    return error;
   }
 }
-
-//Upadate/Add event example
-
-// Update(
-//   Ref(Collection('teams'), '379299546935590993'),
-//   {
-//     data: {
-//     team_events: Append(
-//       Select(['data', 'team_events'], Get(Ref(Collection('teams'), '379299546935590993'))),
-//       [Ref(Collection('invites'), '379299769432932432')]
-//     )
-//   }}
-// )
-
-// Create Team example
-
-// Create(
-//   Collection("teams"),
-//   {
-//     data: {
-//       user: Select('ref', Get(Match(Index('user_by_id'), "user_2WlOHpf16CvOqiIDBnq6m2UoxOv"))),
-//       team_name: "asado",
-//       members: [
-//          Ref(Collection("users"), "379297642900881489")
-//        ]
-//     }
-//   }
-// )
-
-// Get teams wich match with user
-// Select(
-//   "data",
-//   Paginate(
-//     Match(
-//       Index("teams_by_member"),
-//       Ref(Collection("users"), "379297642900881489")
-//     )
-//   )
-// )
-
-// [
-//   Ref(Collection("teams"), "379310795162386513"),
-//   Ref(Collection("teams"), "379310813865836625")
-// ]
-
-// Get invites wich match with Team
-// Select(
-//   "data",
-//   Paginate(
-//     Match(
-//       Index("get_invites_by_team"),
-//       Ref(Collection("teams"), "379310813865836625")
-//     )
-//   )
-// )

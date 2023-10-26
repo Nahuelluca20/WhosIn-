@@ -18,7 +18,7 @@ export default function AssistanceCard({
   return (
     <Link href={`whos-in/${eventId}`}>
       <Card>
-        <CardHeader className="flex sm:w-72 flex-row items-center justify-between space-y-0 pb-2">
+        <CardHeader className="flex w-[315px] sm:w-72 flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">{eventTitle}</CardTitle>
           <span className="gap-1 flex items-center text-muted-foreground text-sm font-medium">
             {totalGuests}

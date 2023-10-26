@@ -4,7 +4,7 @@ import AssistanceCard from "../../cards/assistance-card";
 
 export default function EventsDisplay({events}: {events: EventObject[]}) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full max-w-[1440px]">
+    <div className="flex flex-wrap justify-center md:justify-start sm:justify-start gap-4 w-full max-w-[1440px]">
       {events &&
         events.map((event) => (
           <AssistanceCard

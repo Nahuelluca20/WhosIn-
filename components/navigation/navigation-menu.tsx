@@ -39,8 +39,8 @@ export function NavigationMenu() {
   }
 
   return (
-    <header className="mb-10">
-      <nav className="flex justify-between w-full items-center py-3 px-4 md:px-10 border-b border-b-slate-400">
+    <header className="mb-10 border-b border-b-slate-400 mx-auto">
+      <nav className="max-w-[1440px] flex justify-between mx-auto w-full items-center py-3 px-4 2xl:px-0">
         <div className="flex items-center gap-3">
           <Link href={"/"}>
             <h3 className="font-bold">WhosIn?</h3>

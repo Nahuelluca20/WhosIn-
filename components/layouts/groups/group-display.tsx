@@ -11,10 +11,10 @@ export default function GroupDisplay() {
       title={"Tus grupos"}
     >
       <div className="flex gap-5 justify-center md:justify-start w-full flex-wrap max-w-[1000px]">
-        <EventCard />
-        <EventCard />
-        <EventCard />
-        <EventCard />
+        <EventCard canCreateEvent />
+        <EventCard canCreateEvent />
+        <EventCard canCreateEvent />
+        <EventCard canCreateEvent />
       </div>
     </DashboardTabContentLayout>
   );

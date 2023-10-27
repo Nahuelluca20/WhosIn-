@@ -2,12 +2,13 @@ import {Separator} from "@/components/ui/separator";
 import {SidebarNav} from "@/components/sidebar-nav";
 import GroupDisplay from "@/components/layouts/groups/group-display";
 import NextEventsDisplay from "@/components/layouts/events/next-events-display";
+import CreateEventDisplay from "@/components/layouts/events/create-event-display";
 
 const sidebarNavItems = [
   {
     title: "Crear evento",
     value: "create-event",
-    content: <div className="text-white min-w-[320px]">Crear Evento</div>,
+    content: <CreateEventDisplay />,
   },
   {
     title: "Próximos eventos",

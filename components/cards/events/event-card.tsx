@@ -8,7 +8,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 
-export default function EventCard() {
+export default function EventCard({canCreateEvent = false}: {canCreateEvent?: boolean}) {
   return (
     <>
       <Card className="min-w-[320px] sm:min-w-[270px] lg:min-w-[320px]">
@@ -32,10 +32,11 @@ export default function EventCard() {
             </svg>
           </CardDescription>
         </CardHeader>
-
-        <CardFooter>
-          <Button className="h-8 w-26 px-2">Crear evento</Button>
-        </CardFooter>
+        {canCreateEvent && (
+          <CardFooter>
+            <Button className="h-8 w-26 px-2">Crear evento</Button>
+          </CardFooter>
+        )}
       </Card>
     </>
   );

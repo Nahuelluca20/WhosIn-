@@ -1,5 +1,7 @@
 "use client";
 
+import {useState} from "react";
+
 import {
   Card,
   CardHeader,
@@ -17,10 +19,59 @@ import {
   SelectItem,
   Select,
 } from "@/components/ui/select";
-import {RadioGroup, RadioGroupItem} from "@/components/ui/radio-group";
 import {Button} from "@/components/ui/button";
+import {toast} from "@/components/ui/use-toast";
+import {createEvent} from "@/app/api/actions";
+
+interface CreateEventCardProps {
+  eventName: string;
+  team: string;
+  totalGuest: string;
+  eventPlace: string;
+  month: string;
+  year: string;
+  day: string;
+}
 
 export function CreateEventCard() {
+  const [formData, setForm] = useState<CreateEventCardProps>({
+    eventName: "",
+    team: "",
+    totalGuest: "",
+    eventPlace: "",
+    month: "",
+    year: "",
+    day: "",
+  });
+
+  function handleChangeFormData(inpuntField: string, inputValue: string) {
+    const data = {
+      [inpuntField]: inputValue,
+    };
+
+    setForm({...formData, ...data});
+  }
+
+  async function handleSubmit(data: CreateEventCardProps) {
+    const allFieldsFilled = Object.values(data).every((value) => value !== "");
+
+    if (!allFieldsFilled) {
+      return toast({
+        title: "Datos inválidos",
+        description: "Revisa que los datos esten completos",
+      });
+    }
+
+    if (Number(data.day) < 1 || Number(data.day) > 31) {
+      return toast({
+        title: "Día no válido",
+        description: "Revisa que el dia esté entre 1 y 31",
+      });
+    }
+
+    return await createEvent();
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -28,96 +79,77 @@ export function CreateEventCard() {
         <CardDescription>Agrega la información necesaria para crear el evento.</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-6">
-        {/* <RadioGroup className="grid grid-cols-3 gap-4" defaultValue="card">
-          <div>
-            <RadioGroupItem className="peer sr-only" id="card" value="card" />
-            <Label
-              className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
-              htmlFor="card"
-            >
-              <svg
-                className="mb-3 h-6 w-6"
-                fill="none"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <rect height="14" rx="2" width="20" x="2" y="5" />
-                <path d="M2 10h20" />
-              </svg>
-              Card
-            </Label>
-          </div>
-          <div>
-            <RadioGroupItem className="peer sr-only" id="paypal" value="paypal" />
-            <Label
-              className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
-              htmlFor="paypal"
-            >
-              <Icons.paypal className="mb-3 h-6 w-6" />
-              Paypal
-            </Label>
-          </div>
-          <div>
-            <RadioGroupItem className="peer sr-only" id="apple" value="apple" />
-            <Label
-              className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
-              htmlFor="apple"
-            >
-              <Icons.apple className="mb-3 h-6 w-6" />
-              Apple
-            </Label>
-          </div>
-        </RadioGroup> */}
         <div className="flex gap-5">
           <div className="grid gap-2">
             <Label htmlFor="eventName">Nombre del evento</Label>
-            <Input id="eventName" placeholder="Asado en el tata" />
+            <Input
+              id="eventName"
+              placeholder="Asado en el tata"
+              onChange={(e) => handleChangeFormData("eventName", e.target.value)}
+            />
           </div>
-          <div className="grid gap-2">
-            <Label htmlFor="eventPlace">Lugar del evento</Label>
-            <Input id="eventPlace" placeholder="https://maps.app.goo.gl/LoZU1Yijk6V9mQnq7" />
+          <div className="grid gap-2 w-full max-w-[212px]">
+            <Label htmlFor="team">Expires</Label>
+            <Select onValueChange={(value) => handleChangeFormData("team", value)}>
+              <SelectTrigger id="team">
+                <SelectValue placeholder="Grupo" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Asado">Asado</SelectItem>
+                <SelectItem value="Fulbo">Fulbo</SelectItem>
+                <SelectItem value="Tata house">Tata house</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
-        <div className="flex gap-5">
+        <div className="flex gap-5 items-end">
           <div className="grid gap-2">
-            <Label htmlFor="totalGuest">Cantidad de invitados</Label>
-            <Input id="number" placeholder="8" type="totalGuest" />
+            <Label htmlFor="totalGuest">Total de invitados</Label>
+            <Input
+              className="md:w-[212px]"
+              id="totalGuest"
+              max={"50"}
+              min={"1"}
+              placeholder="8"
+              type="number"
+              onChange={(e) => handleChangeFormData("totalGuest", e.target.value)}
+            />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="eventPlace">Lugar del evento</Label>
-            <Input id="eventPlace" placeholder="https://maps.app.goo.gl/LoZU1Yijk6V9mQnq7" />
+            <Input
+              id="eventPlace"
+              placeholder="https://maps.app.goo.gl/LoZU1Yijk6V9mQnq7"
+              onChange={(e) => handleChangeFormData("eventPlace", e.target.value)}
+            />
           </div>
         </div>
         <div className="grid grid-cols-3 gap-4">
           <div className="grid gap-2">
             <Label htmlFor="month">Expires</Label>
-            <Select>
+            <Select onValueChange={(value) => handleChangeFormData("month", value)}>
               <SelectTrigger id="month">
                 <SelectValue placeholder="Month" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="1">January</SelectItem>
-                <SelectItem value="2">February</SelectItem>
-                <SelectItem value="3">March</SelectItem>
-                <SelectItem value="4">April</SelectItem>
-                <SelectItem value="5">May</SelectItem>
-                <SelectItem value="6">June</SelectItem>
-                <SelectItem value="7">July</SelectItem>
-                <SelectItem value="8">August</SelectItem>
-                <SelectItem value="9">September</SelectItem>
-                <SelectItem value="10">October</SelectItem>
-                <SelectItem value="11">November</SelectItem>
-                <SelectItem value="12">December</SelectItem>
+                <SelectItem value="1">Enero</SelectItem>
+                <SelectItem value="2">Febrero</SelectItem>
+                <SelectItem value="3">Marzo</SelectItem>
+                <SelectItem value="4">Abril</SelectItem>
+                <SelectItem value="5">Mayo</SelectItem>
+                <SelectItem value="6">Junio</SelectItem>
+                <SelectItem value="7">Julio</SelectItem>
+                <SelectItem value="8">Agosto</SelectItem>
+                <SelectItem value="9">Septiembre</SelectItem>
+                <SelectItem value="10">Octubre</SelectItem>
+                <SelectItem value="11">Noviembre</SelectItem>
+                <SelectItem value="12">Diciembre</SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div className="grid gap-2">
             <Label htmlFor="year">Year</Label>
-            <Select>
+            <Select onValueChange={(value) => handleChangeFormData("year", value)}>
               <SelectTrigger id="year">
                 <SelectValue placeholder="Year" />
               </SelectTrigger>
@@ -131,13 +163,23 @@ export function CreateEventCard() {
             </Select>
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="cvc">CVC</Label>
-            <Input id="cvc" placeholder="CVC" />
+            <Label htmlFor="day">Día</Label>
+            <Input
+              className="xl:w-[212px]"
+              id="day"
+              max="31"
+              min="1"
+              placeholder="21"
+              type="number"
+              onChange={(e) => handleChangeFormData("day", e.target.value)}
+            />
           </div>
         </div>
       </CardContent>
       <CardFooter>
-        <Button className="w-full">Continue</Button>
+        <Button className="w-full" onClick={() => handleSubmit(formData)}>
+          Continue
+        </Button>
       </CardFooter>
     </Card>
   );

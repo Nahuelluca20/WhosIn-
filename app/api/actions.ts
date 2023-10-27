@@ -161,3 +161,25 @@ export async function createGroup(
     return error;
   }
 }
+
+export async function createEvent() {
+  try {
+    const event = await faunaClient.query(
+      q.Create(q.Collection("invites"), {
+        data: {
+          team_name: "prueba",
+          name: "test",
+          total_guests: "10",
+          place_direction: "https://maps.app.goo.gl/oiDmbBMUEaFuvQoV9",
+          place_name: "wandy house 2",
+          event_date: "15-10-2023",
+          users_attend: [],
+        },
+      }),
+    );
+
+    return event;
+  } catch (error) {
+    return error;
+  }
+}

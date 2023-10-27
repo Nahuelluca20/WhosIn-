@@ -12,8 +12,8 @@ export default async function page({params}: {params: {id: string}}) {
 
   let totalGuests = eventData.data[0]?.data.total_guests;
   let usersAttend = eventData.data[0]?.data.users_attend;
-  let unconfirmed = eventData.data[0]?.data.unconfirmed;
-  let attend = eventData.data[0]?.data.attend;
+  let unconfirmed = Number(totalGuests) - Number(usersAttend.length);
+  let attend = usersAttend.length;
   let eventTitle = eventData.data[0]?.data.event_title;
   let placeDirection = eventData.data[0]?.data.place_direction;
   let placeName = eventData.data[0]?.data.place_name;
@@ -45,11 +45,11 @@ export default async function page({params}: {params: {id: string}}) {
                 </div>
                 <div>
                   <span className="text-sm font-bold">Personas invitadas:</span>
-                  <p className="text-sm">{attend}</p>
+                  <p className="text-sm">{totalGuests}</p>
                 </div>
                 <div>
                   <span className="text-sm font-bold">Asisten:</span>
-                  <p className="text-sm">{totalGuests}</p>
+                  <p className="text-sm">{attend}</p>
                 </div>
                 <div>
                   <span className="text-sm font-bold">Sin confirmar:</span>

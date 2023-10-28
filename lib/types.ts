@@ -12,7 +12,20 @@ export interface Data {
   place_name: string;
   place_direction: string;
   event_date: string;
+  users_attend: {
+    name: string;
+    email: string;
+  }[];
   team: Ref;
+}
+
+export interface Teams {
+  ref: Ref;
+  ts: number;
+  data: {
+    team_name: string;
+    members: Ref[];
+  };
 }
 
 export interface EventObject {
@@ -33,4 +46,15 @@ export interface UserDb {
     email: string;
     user_id: string;
   };
+}
+
+export interface CreateEventCardProps {
+  eventName: string;
+  team: string;
+  placeName: string;
+  totalGuest: string;
+  eventPlace: string;
+  month: string;
+  year: string;
+  day: string;
 }

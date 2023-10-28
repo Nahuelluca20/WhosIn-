@@ -9,11 +9,16 @@ export default function EventsDisplay({events}: {events: EventObject[]}) {
         events.map((event) => (
           <AssistanceCard
             key={event.ref.id}
-            attend={event.data?.attend ?? ""}
+            attend={String(event.data?.users_attend?.length) ?? "0"}
             eventId={event.ref.id}
             eventTitle={event.data?.event_title ?? ""}
             totalGuests={event.data?.total_guests ?? ""}
-            unconfirmed={event.data?.unconfirmed ?? ""}
+            unconfirmed={
+              String(
+                Number(event.data?.total_guests) -
+                  Number(event.data ? event.data?.users_attend?.length : 0),
+              ) ?? ""
+            }
           />
         ))}
     </div>

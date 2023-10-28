@@ -10,11 +10,11 @@ const sidebarNavItems = [
     value: "create-event",
     content: <CreateEventDisplay />,
   },
-  {
-    title: "Próximos eventos",
-    value: "next-events",
-    content: <NextEventsDisplay />,
-  },
+  // {
+  //   title: "Próximos eventos",
+  //   value: "next-events",
+  //   content: <NextEventsDisplay />,
+  // },
   {
     title: "Tus grupos",
     value: "your-groups",

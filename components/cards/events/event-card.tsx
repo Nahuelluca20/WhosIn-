@@ -1,3 +1,6 @@
+"use client";
+import {useState} from "react";
+
 import {Button} from "@/components/ui/button";
 import {
   Card,
@@ -7,15 +10,29 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
+import {Dialog, DialogContent} from "@/components/ui/dialog";
 
-export default function EventCard({canCreateEvent = false}: {canCreateEvent?: boolean}) {
+import {CreateEventCard} from "./create-event-card";
+
+export default function EventCard({
+  canCreateEvent = false,
+  eventName,
+  members,
+}: {
+  canCreateEvent?: boolean;
+  eventName: string;
+  members: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const [showNewTeamDialog, setShowNewTeamDialog] = useState(false);
+
   return (
     <>
       <Card className="min-w-[320px] sm:min-w-[270px] lg:min-w-[320px]">
         <CardHeader>
-          <CardTitle>Card Title</CardTitle>
+          <CardTitle>{eventName}</CardTitle>
           <CardDescription className="flex gap-1">
-            Integrantes en el grupo: 8{" "}
+            Integrantes en el grupo: {members}{" "}
             <svg
               className="h-4 w-4 text-muted-foreground"
               fill="none"
@@ -34,10 +51,23 @@ export default function EventCard({canCreateEvent = false}: {canCreateEvent?: bo
         </CardHeader>
         {canCreateEvent && (
           <CardFooter>
-            <Button className="h-8 w-26 px-2">Crear evento</Button>
+            <Button
+              className="h-8 w-26 px-2"
+              onClick={() => {
+                setOpen(false);
+                setShowNewTeamDialog(true);
+              }}
+            >
+              Crear evento
+            </Button>
           </CardFooter>
         )}
       </Card>
+      <Dialog open={showNewTeamDialog} onOpenChange={setShowNewTeamDialog}>
+        <DialogContent className="max-w-[360px] md:min-w-[750px]">
+          <CreateEventCard withOutBorder />
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

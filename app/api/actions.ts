@@ -2,7 +2,7 @@
 import {query as q} from "faunadb";
 
 import {faunaClient} from "@/lib/fauna";
-import {Ref, UserDb} from "@/lib/types";
+import {CreateEventCardProps, Ref, UserDb} from "@/lib/types";
 
 // Get fauna id by Clerck userId
 export async function getFaunaUserId(userId: string) {
@@ -43,17 +43,41 @@ export async function getEventByTeam(teamId: string) {
   }
 }
 
-// Get all team/group in a user by userId(fauna id)
-export async function getTeamsByUserId(userId: string) {
+export async function getAllEventsByUser(userId: string) {
   try {
-    const data: Ref[] = await faunaClient.query(
-      q.Select(
-        "data",
-        q.Paginate(q.Match(q.Index("teams_by_member"), q.Ref(q.Collection("users"), userId))),
+    const data = await faunaClient.query(
+      q.Map(
+        q.Paginate(q.Match(q.Index("get_invites_by_user"), q.Ref(q.Collection("users"), userId))),
+        q.Lambda("ref", q.Get(q.Var("ref"))),
       ),
     );
 
     return data;
+  } catch (error) {
+    return [];
+  }
+}
+
+// Get all team/group in a user by userId(fauna id)
+export async function getTeamsByUserId(userId: string) {
+  try {
+    const teamRefs: {data: [Ref[]]} = await faunaClient.query(
+      q.Paginate(q.Match(q.Index("teams_by_member"), q.Ref(q.Collection("users"), userId))),
+    );
+
+    const teamData: {id: string; name: string; members: Ref[]}[] = await Promise.all(
+      teamRefs.data.map(async (teamRef) => {
+        const teamInfo: any = await faunaClient.query(q.Get(teamRef));
+
+        const teamName = teamInfo.data.team_name;
+        const teamId = teamInfo.ref.id;
+        const members = teamInfo.data.members;
+
+        return {id: teamId, name: teamName, members: members};
+      }),
+    );
+
+    return teamData;
   } catch (error) {
     return [];
   }
@@ -162,18 +186,18 @@ export async function createGroup(
   }
 }
 
-export async function createEvent() {
+export async function createEvent(formData: CreateEventCardProps) {
   try {
     const event = await faunaClient.query(
       q.Create(q.Collection("invites"), {
         data: {
-          team_name: "prueba",
-          name: "test",
-          total_guests: "10",
-          place_direction: "https://maps.app.goo.gl/oiDmbBMUEaFuvQoV9",
-          place_name: "wandy house 2",
-          event_date: "15-10-2023",
+          event_title: formData.eventName,
+          total_guests: formData.totalGuest,
+          place_direction: formData.eventPlace,
+          place_name: formData.placeName,
+          event_date: `${formData.month}-${formData.day}-${formData.year}`,
           users_attend: [],
+          team: q.Ref(q.Collection("teams"), formData.team),
         },
       }),
     );

@@ -1,6 +1,7 @@
 "use client";
 
-import {useState} from "react";
+import {useCallback, useEffect, useState} from "react";
+import {useAuth} from "@clerk/nextjs";
 
 import {
   Card,
@@ -21,22 +22,16 @@ import {
 } from "@/components/ui/select";
 import {Button} from "@/components/ui/button";
 import {toast} from "@/components/ui/use-toast";
-import {createEvent} from "@/app/api/actions";
+import {createEvent, getFaunaUserId, getTeamsByUserId} from "@/app/api/actions";
+import {CreateEventCardProps} from "@/lib/types";
 
-interface CreateEventCardProps {
-  eventName: string;
-  team: string;
-  totalGuest: string;
-  eventPlace: string;
-  month: string;
-  year: string;
-  day: string;
-}
-
-export function CreateEventCard() {
+export function CreateEventCard({withOutBorder = false}: {withOutBorder?: boolean}) {
+  const {userId: userIdAuth} = useAuth();
+  const [teams, setTeams] = useState<{id: string; name: string}[] | null>([]);
   const [formData, setForm] = useState<CreateEventCardProps>({
     eventName: "",
     team: "",
+    placeName: "",
     totalGuest: "",
     eventPlace: "",
     month: "",
@@ -51,6 +46,14 @@ export function CreateEventCard() {
 
     setForm({...formData, ...data});
   }
+
+  const getTeamsNames = useCallback(async () => {
+    const userId = await getFaunaUserId(userIdAuth as string);
+    const teamsNames = await getTeamsByUserId(userId);
+
+    setTeams(teamsNames as any);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function handleSubmit(data: CreateEventCardProps) {
     const allFieldsFilled = Object.values(data).every((value) => value !== "");
@@ -69,11 +72,28 @@ export function CreateEventCard() {
       });
     }
 
-    return await createEvent();
+    let event = await createEvent(data);
+
+    if (event) {
+      return toast({
+        title: "Evento creado",
+        description: "Tu evento fue creado con éxtio",
+      });
+    } else {
+      return toast({
+        title: "Algo salió mal",
+        description: "Revisa los datos o inténtalo más tarde",
+      });
+    }
   }
 
+  useEffect(() => {
+    getTeamsNames();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <Card>
+    <Card className={`${withOutBorder && "border-none shadow-none"}`}>
       <CardHeader>
         <CardTitle>Crea tu nuevo evento</CardTitle>
         <CardDescription>Agrega la información necesaria para crear el evento.</CardDescription>
@@ -89,15 +109,18 @@ export function CreateEventCard() {
             />
           </div>
           <div className="grid gap-2 w-full max-w-[212px]">
-            <Label htmlFor="team">Expires</Label>
+            <Label htmlFor="team">Grupo</Label>
             <Select onValueChange={(value) => handleChangeFormData("team", value)}>
               <SelectTrigger id="team">
                 <SelectValue placeholder="Grupo" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Asado">Asado</SelectItem>
-                <SelectItem value="Fulbo">Fulbo</SelectItem>
-                <SelectItem value="Tata house">Tata house</SelectItem>
+                {teams &&
+                  teams?.map((team) => (
+                    <SelectItem key={team.id} value={team.id}>
+                      {team.name}
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
           </div>
@@ -123,6 +146,15 @@ export function CreateEventCard() {
               onChange={(e) => handleChangeFormData("eventPlace", e.target.value)}
             />
           </div>
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="placeName">Nombre del lugar</Label>
+          <Input
+            className="w-full max-w-[212px]"
+            id="placeName"
+            placeholder="tata house"
+            onChange={(e) => handleChangeFormData("placeName", e.target.value)}
+          />
         </div>
         <div className="grid grid-cols-3 gap-4">
           <div className="grid gap-2">

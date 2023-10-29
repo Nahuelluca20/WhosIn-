@@ -1,11 +1,12 @@
 import Link from "next/link";
 import {format} from "date-fns";
 
-import {getEventById} from "@/app/api/actions";
+import {getEventById, getUserById} from "@/app/api/actions";
 import GuestUsers from "@/components/cards/guest-users";
 import {Button} from "@/components/ui/button";
 import {Card, CardHeader, CardTitle, CardDescription, CardContent} from "@/components/ui/card";
 import CalendarClient from "@/components/calendar-client";
+import ShareEventButton from "@/components/buttons/share-event";
 
 export default async function page({params}: {params: {id: string}}) {
   const eventData: any = await getEventById(params.id as string);
@@ -18,6 +19,11 @@ export default async function page({params}: {params: {id: string}}) {
   let placeDirection = eventData.data[0]?.data.place_direction;
   let placeName = eventData.data[0]?.data.place_name;
   let day = eventData.data[0]?.data.event_date;
+  let getAllUsers = await Promise.all(
+    usersAttend.map(async (user: any) => {
+      return await getUserById(user.id);
+    }),
+  );
 
   let dayInLetters = format(new Date(day), "PP");
 
@@ -56,9 +62,15 @@ export default async function page({params}: {params: {id: string}}) {
                   <p className="text-sm">{unconfirmed}</p>
                 </div>
               </div>
-              <Link href={placeDirection} target="_blank">
-                <Button>Ver dirección</Button>
-              </Link>
+              <div className="flex gap-2">
+                <Link href={placeDirection} target="_blank">
+                  <Button>Ver dirección</Button>
+                </Link>
+                <Link href={placeDirection} target="_blank">
+                  <Button>Asistir</Button>
+                </Link>
+                <ShareEventButton eventUrl={`http://localhost:3000/whos-in/${params.id}`} />
+              </div>
             </aside>
           </section>
         </CardContent>
@@ -69,7 +81,7 @@ export default async function page({params}: {params: {id: string}}) {
           <CardDescription>Hay {totalGuests} personas invitadas.</CardDescription>
         </CardHeader>
         <CardContent>
-          <GuestUsers usersAttend={usersAttend} />
+          <GuestUsers usersAttend={getAllUsers} />
         </CardContent>
       </Card>
     </main>

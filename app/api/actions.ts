@@ -27,6 +27,20 @@ export async function getEventById(eventId: string) {
   return data;
 }
 
+// Get user by id
+export async function getUserById(userId: string) {
+  const res: {name: string; email: string; user_id: string} = await faunaClient.query(
+    q.Select("data", q.Get(q.Match(q.Index("get_user_by_id"), userId))),
+  );
+
+  const parseData = {
+    name: res.name,
+    email: res.email,
+  };
+
+  return parseData;
+}
+
 // Get all event/invite in a team/group by teamId
 export async function getEventByTeam(teamId: string) {
   try {

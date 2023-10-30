@@ -4,6 +4,8 @@ import {query as q} from "faunadb";
 import {faunaClient} from "@/lib/fauna";
 import {CreateEventCardProps, UserDb} from "@/lib/types";
 
+import {getTeamsByUserId} from "./teams";
+
 // Get fauna id by Clerck userId
 export async function getFaunaUserId(userId: string) {
   try {
@@ -133,6 +135,7 @@ export async function addUserInEvent(eventId: string, userId: string) {
 export async function attendEvent(
   userId: string,
   eventId: string,
+  teamId: string,
   emailAddresses?: string,
   userNames?: string,
 ) {
@@ -146,10 +149,45 @@ export async function attendEvent(
       const id = await getFaunaUserId(userId);
 
       const addUser = addUserInEvent(eventId, id);
+      const teams: any = getTeamsByUserId(id);
+      const userInTeams = await teams.filter((team: any) => team.id === teamId);
+
+      if (userInTeams.length === 0) {
+        const addTeam = await faunaClient.query(
+          q.Update(q.Ref(q.Collection("teams"), teamId), {
+            data: {
+              members: q.Append(
+                [q.Ref(q.Collection("users"), id)],
+                q.Select(["data", "members"], q.Get(q.Ref(q.Collection("teams"), teamId))),
+              ),
+            },
+          }),
+        );
+
+        return addTeam;
+      }
 
       return addUser;
     } else {
-      const addUser = addUserInEvent(eventId, id);
+      const addUser = await addUserInEvent(eventId, id);
+      const teams: any = await getTeamsByUserId(id);
+
+      const userInTeams = await teams.filter((team: any) => team.id === teamId);
+
+      if (userInTeams.length === 0) {
+        const addTeam = await faunaClient.query(
+          q.Update(q.Ref(q.Collection("teams"), teamId), {
+            data: {
+              members: q.Append(
+                [q.Ref(q.Collection("users"), id)],
+                q.Select(["data", "members"], q.Get(q.Ref(q.Collection("teams"), teamId))),
+              ),
+            },
+          }),
+        );
+
+        return addTeam;
+      }
 
       return addUser;
     }

@@ -1,4 +1,5 @@
 import {Avatar, AvatarImage, AvatarFallback} from "../ui/avatar";
+import {ScrollArea} from "../ui/scroll-area";
 
 function getTwoFirstLetters(text: string) {
   return text

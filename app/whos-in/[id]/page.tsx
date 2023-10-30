@@ -9,6 +9,7 @@ import ShareEventButton from "@/components/buttons/share-event";
 import AttendEventButton from "@/components/buttons/attend-event";
 import {getUserById} from "@/app/api/actions";
 import {getEventById} from "@/app/api/events";
+import {ScrollArea} from "@/components/ui/scroll-area";
 
 export default async function page({params}: {params: {id: string}}) {
   const eventData: any = await getEventById(params.id as string);
@@ -18,6 +19,7 @@ export default async function page({params}: {params: {id: string}}) {
   const usersAttend = eventInfo?.users_attend || [];
   const unconfirmed = totalGuests - usersAttend.length;
   const attend = usersAttend.length;
+  const teamId = eventInfo.team.id;
 
   const {
     event_title: eventTitle,
@@ -68,14 +70,22 @@ export default async function page({params}: {params: {id: string}}) {
                 <Link href={placeDirection} target="_blank">
                   <Button>Ver dirección</Button>
                 </Link>
-                <AttendEventButton eventId={params.id} />
+                <AttendEventButton
+                  disabled={unconfirmed === 0}
+                  eventId={params.id}
+                  teamId={teamId}
+                />
                 <ShareEventButton eventUrl={`http://localhost:3000/whos-in/${params.id}`} />
               </div>
             </aside>
           </section>
         </CardContent>
       </Card>
-      <Card className="col-span-3 w-full lg:max-w-[350px]">
+      {/* <Card className="col-span-3 w-full lg:max-w-[350px]"> */}
+      <ScrollArea
+        className="col-span-3 max-h-[472.64px] border rounded-md w-full lg:max-w-[350px]"
+        type="auto"
+      >
         <CardHeader className="">
           <CardTitle className="text-sm font-bold mb-[-6px]">Usuarios que asistirán</CardTitle>
           <CardDescription>Hay {totalGuests} personas invitadas.</CardDescription>
@@ -83,7 +93,7 @@ export default async function page({params}: {params: {id: string}}) {
         <CardContent>
           <GuestUsers usersAttend={getAllUsers} />
         </CardContent>
-      </Card>
+      </ScrollArea>
     </main>
   );
 }

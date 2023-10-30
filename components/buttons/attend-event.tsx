@@ -5,7 +5,15 @@ import {attendEvent} from "@/app/api/actions";
 
 import {Button} from "../ui/button";
 
-export default function AttendEventButton({eventId}: {eventId: string}) {
+export default function AttendEventButton({
+  eventId,
+  teamId,
+  disabled,
+}: {
+  eventId: string;
+  teamId: string;
+  disabled: boolean;
+}) {
   async function create() {
     "use server";
     const user: User | null = await currentUser();
@@ -13,6 +21,7 @@ export default function AttendEventButton({eventId}: {eventId: string}) {
     await attendEvent(
       user?.id ?? "",
       eventId,
+      teamId,
       user?.emailAddresses[0].emailAddress ?? "",
       user?.firstName?.concat(" ", user?.lastName as string) ?? "",
     );
@@ -22,7 +31,7 @@ export default function AttendEventButton({eventId}: {eventId: string}) {
 
   return (
     <form action={create}>
-      <Button>Asistir</Button>
+      <Button disabled={disabled}>Asistir</Button>
     </form>
   );
 }

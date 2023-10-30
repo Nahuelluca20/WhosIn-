@@ -221,3 +221,52 @@ export async function createEvent(formData: CreateEventCardProps) {
     return error;
   }
 }
+
+// Add user in event
+export async function addUserInEvent(eventId: string, userId: string) {
+  try {
+    const updatedInvite = await faunaClient.query(
+      q.Update(q.Ref(q.Collection("invites"), eventId), {
+        data: {
+          users_attend: q.Append(
+            [q.Ref(q.Collection("users"), userId)],
+            q.Select(["data", "users_attend"], q.Get(q.Ref(q.Collection("invites"), eventId))),
+          ),
+        },
+      }),
+    );
+
+    return updatedInvite;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// attend event
+export async function attendEvent(
+  userId: string,
+  eventId: string,
+  emailAddresses?: string,
+  userNames?: string,
+) {
+  try {
+    const id = await getFaunaUserId(userId);
+
+    if (!id && emailAddresses && userNames) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const user: UserDb = await createUserByClerkId(userId, userNames, emailAddresses);
+
+      const id = await getFaunaUserId(userId);
+
+      const addUser = addUserInEvent(eventId, id);
+
+      return addUser;
+    } else {
+      const addUser = addUserInEvent(eventId, id);
+
+      return addUser;
+    }
+  } catch (error) {
+    return error;
+  }
+}

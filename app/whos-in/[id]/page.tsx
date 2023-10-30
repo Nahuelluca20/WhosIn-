@@ -7,6 +7,7 @@ import {Button} from "@/components/ui/button";
 import {Card, CardHeader, CardTitle, CardDescription, CardContent} from "@/components/ui/card";
 import CalendarClient from "@/components/calendar-client";
 import ShareEventButton from "@/components/buttons/share-event";
+import AttendEventButton from "@/components/buttons/attend-event";
 
 export default async function page({params}: {params: {id: string}}) {
   const eventData: any = await getEventById(params.id as string);
@@ -66,9 +67,7 @@ export default async function page({params}: {params: {id: string}}) {
                 <Link href={placeDirection} target="_blank">
                   <Button>Ver dirección</Button>
                 </Link>
-                <Link href={placeDirection} target="_blank">
-                  <Button>Asistir</Button>
-                </Link>
+                <AttendEventButton eventId={params.id} />
                 <ShareEventButton eventUrl={`http://localhost:3000/whos-in/${params.id}`} />
               </div>
             </aside>

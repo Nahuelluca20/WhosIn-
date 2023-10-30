@@ -1,3 +1,7 @@
+import {useEffect, useState} from "react";
+
+import {getEventById, getUserById} from "@/app/api/actions";
+
 import {Avatar, AvatarImage, AvatarFallback} from "../ui/avatar";
 
 function getTwoFirstLetters(text: string) {
@@ -8,14 +12,7 @@ function getTwoFirstLetters(text: string) {
     .join("");
 }
 
-export default function GuestUsers({
-  usersAttend,
-}: {
-  usersAttend: {
-    name: string;
-    email: string;
-  }[];
-}) {
+export default function GuestUsers({usersAttend}: {usersAttend: {name: string; email: string}[]}) {
   return (
     <div className="space-y-8">
       {usersAttend &&

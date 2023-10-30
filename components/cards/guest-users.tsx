@@ -1,7 +1,5 @@
 import {useEffect, useState} from "react";
 
-import {getEventById, getUserById} from "@/app/api/actions";
-
 import {Avatar, AvatarImage, AvatarFallback} from "../ui/avatar";
 
 function getTwoFirstLetters(text: string) {

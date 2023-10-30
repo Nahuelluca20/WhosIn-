@@ -2,8 +2,9 @@ import {currentUser} from "@clerk/nextjs";
 import {User} from "@clerk/nextjs/server";
 
 import EventCard from "@/components/cards/events/event-card";
-import {getFaunaUserId, getAllEventsByUser} from "@/app/api/actions";
 import {EventData} from "@/lib/types";
+import {getAllEventsByUser} from "@/app/api/events";
+import {getFaunaUserId} from "@/app/api/actions";
 
 import DashboardTabContentLayout from "../dashboard/dashboard-tab-content-layout";
 

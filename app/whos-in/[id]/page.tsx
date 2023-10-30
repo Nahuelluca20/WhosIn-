@@ -1,32 +1,33 @@
 import Link from "next/link";
 import {format} from "date-fns";
 
-import {getEventById, getUserById} from "@/app/api/actions";
 import GuestUsers from "@/components/cards/guest-users";
 import {Button} from "@/components/ui/button";
 import {Card, CardHeader, CardTitle, CardDescription, CardContent} from "@/components/ui/card";
 import CalendarClient from "@/components/calendar-client";
 import ShareEventButton from "@/components/buttons/share-event";
 import AttendEventButton from "@/components/buttons/attend-event";
+import {getUserById} from "@/app/api/actions";
+import {getEventById} from "@/app/api/events";
 
 export default async function page({params}: {params: {id: string}}) {
   const eventData: any = await getEventById(params.id as string);
+  const eventInfo = eventData.data[0]?.data;
 
-  let totalGuests = eventData.data[0]?.data.total_guests;
-  let usersAttend = eventData.data[0]?.data.users_attend;
-  let unconfirmed = Number(totalGuests) - Number(usersAttend.length);
-  let attend = usersAttend.length;
-  let eventTitle = eventData.data[0]?.data.event_title;
-  let placeDirection = eventData.data[0]?.data.place_direction;
-  let placeName = eventData.data[0]?.data.place_name;
-  let day = eventData.data[0]?.data.event_date;
-  let getAllUsers = await Promise.all(
-    usersAttend.map(async (user: any) => {
-      return await getUserById(user.id);
-    }),
-  );
+  const totalGuests = Number(eventInfo?.total_guests);
+  const usersAttend = eventInfo?.users_attend || [];
+  const unconfirmed = totalGuests - usersAttend.length;
+  const attend = usersAttend.length;
 
-  let dayInLetters = format(new Date(day), "PP");
+  const {
+    event_title: eventTitle,
+    place_direction: placeDirection,
+    place_name: placeName,
+    event_date: day,
+  } = eventInfo;
+
+  const getAllUsers = await Promise.all(usersAttend.map(async (user: any) => getUserById(user.id)));
+  const dayInLetters = format(new Date(day), "PP");
 
   return (
     <main className="w-full grid pb-5 md:flex gap-5 justify-center px-5 md:px-10">

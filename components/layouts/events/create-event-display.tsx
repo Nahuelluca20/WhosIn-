@@ -5,7 +5,8 @@ import {currentUser} from "@clerk/nextjs";
 import {CreateEventCard} from "@/components/cards/events/create-event-card";
 import {ScrollArea} from "@/components/ui/scroll-area";
 import {Separator} from "@/components/ui/separator";
-import {getFaunaUserId, getTeamsNamesByUserId} from "@/app/api/actions";
+import {getTeamsNamesByUserId} from "@/app/api/teams";
+import {getFaunaUserId} from "@/app/api/actions";
 
 import DashboardTabContentLayout from "../dashboard/dashboard-tab-content-layout";
 

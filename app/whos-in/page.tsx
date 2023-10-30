@@ -7,7 +7,9 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import EventsDisplay from "@/components/layouts/events/events-display";
 import EventSwitcher from "@/components/navigation/event-switcher";
 
-import {getEventByTeam, getFaunaUserId, getTeamByMatchUserId} from "../api/actions";
+import {getFaunaUserId} from "../api/actions";
+import {getEventByTeam} from "../api/events";
+import {getTeamByMatchUserId} from "../api/teams";
 
 function EmptyEvents({text}: {text: string}) {
   return (

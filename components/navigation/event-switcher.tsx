@@ -30,7 +30,8 @@ import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
-import {createGroup, getFaunaUserId, getTeamsNamesByUserId} from "@/app/api/actions";
+import {getFaunaUserId, createGroup} from "@/app/api/actions";
+import {getTeamsNamesByUserId} from "@/app/api/teams";
 
 const groups = [
   {

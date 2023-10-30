@@ -22,8 +22,9 @@ import {
 } from "@/components/ui/select";
 import {Button} from "@/components/ui/button";
 import {toast} from "@/components/ui/use-toast";
-import {createEvent, getFaunaUserId, getTeamsByUserId} from "@/app/api/actions";
 import {CreateEventCardProps} from "@/lib/types";
+import {getFaunaUserId, createEvent} from "@/app/api/actions";
+import {getTeamsByUserId} from "@/app/api/teams";
 
 export function CreateEventCard({withOutBorder = false}: {withOutBorder?: boolean}) {
   const {userId: userIdAuth} = useAuth();

@@ -2,7 +2,8 @@ import {currentUser} from "@clerk/nextjs";
 import {User} from "@clerk/nextjs/server";
 
 import EventCard from "@/components/cards/events/event-card";
-import {getFaunaUserId, getTeamsByUserId} from "@/app/api/actions";
+import {getFaunaUserId} from "@/app/api/actions";
+import {getTeamsByUserId} from "@/app/api/teams";
 
 import DashboardTabContentLayout from "../dashboard/dashboard-tab-content-layout";
 
